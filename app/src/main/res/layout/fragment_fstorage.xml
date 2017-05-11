@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    tools:context="com.cst.scanner.FStorage">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:background="@drawable/background_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/llMenu"
+            android:background="#454545"
+            android:weightSum="4"
+            android:layout_below="@+id/rlFirst"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <LinearLayout
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <Button
+                    android:background="@drawable/print_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llFile"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <Button
+                    android:background="@drawable/openfile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llAbout"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <Button
+                    android:background="@drawable/info"
+                    android:layout_width="10dp"
+                    android:layout_height="30dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <Button
+                    android:background="@drawable/huongdan"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+            </LinearLayout>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_below="@+id/llMenu"
+            android:id="@+id/rlListview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+
+                android:id="@+id/recycler_view"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

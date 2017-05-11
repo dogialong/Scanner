@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bg_mavigation_top"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_60sdp"
+    android:background="@color/colorNav1"
+    android:orientation="horizontal">
+    <Button
+        android:background="@drawable/menubar"
+        android:id="@+id/icback"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:layout_width="20dp"
+        android:layout_height="15dp" />
+    <Button
+        android:visibility="gone"
+        android:background="@drawable/ic_back"
+        android:id="@+id/icback1"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
+    <TextView
+        android:id="@+id/tvHomeBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="60dip"
+        android:gravity="center"
+        android:text="About us"
+        android:textColor="@color/colorWhite"
+        android:textSize="22dip"
+        />
+
+        <Button
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:id="@+id/btn_setting"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:visibility="gone" />
+    <LinearLayout
+        android:id="@+id/llEditPhoto"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:id="@+id/btnErasor"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:visibility="visible" />
+        <Button
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:id="@+id/btnSave"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:visibility="visible" />
+    </LinearLayout>
+</RelativeLayout>

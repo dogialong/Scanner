@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Scanner</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="diachi">Location</string>
+    <string name="muctieu">Purpose</string>
+    <string name="thich">Like us in Facebook</string>
+    <string name="cst">cstsolution.com</string>
+    <string name="location">52 Cu Chinh Lan Street, Khuong Mai Ward, Thanh Xuan District, Hanoi, Vietnam</string>
+
+</resources>

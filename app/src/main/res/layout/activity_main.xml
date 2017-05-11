@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_main"
+    tools:context="com.cst.scanner.MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nav"
+        >
+        <include  layout="@layout/navigationbartop"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_below="@+id/nav"
+        android:id="@+id/main_contain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_marginTop="40dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="40sp"
+            android:text="Cam Scanner"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+        <RelativeLayout
+            android:id="@+id/rlFirst"
+            android:layout_marginTop="@dimen/_60sdp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_below="@+id/tvName"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:id="@+id/llNew"
+                    android:background="@drawable/circle_none"
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/with_circle"
+                    android:gravity="center"
+                    android:layout_height="@dimen/with_circle"
+                    >
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:src="@drawable/print_icon"
+                        android:layout_width="@dimen/with_icon"
+                        android:layout_height="@dimen/with_icon" />
+
+                </LinearLayout>
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="New"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:id="@+id/llFiles"
+                    android:background="@drawable/circle_none"
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/with_circle"
+                    android:gravity="center"
+                    android:layout_height="@dimen/with_circle"
+                    >
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:src="@drawable/openfile"
+                        android:layout_width="@dimen/with_icon"
+                        android:layout_height="@dimen/with_icon" />
+
+                </LinearLayout>
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="Files"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_below="@+id/rlFirst"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:id="@+id/llAboutus"
+                    android:background="@drawable/circle_none"
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/with_circle"
+                    android:gravity="center"
+                    android:layout_height="@dimen/with_circle"
+                    >
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:src="@drawable/info"
+                        android:layout_width="@dimen/with_icon"
+                        android:layout_height="@dimen/with_icon" />
+
+                </LinearLayout>
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="About us"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_alignParentRight="true"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:id="@+id/llHelp"
+                    android:background="@drawable/circle_none"
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/with_circle"
+                    android:gravity="center"
+                    android:layout_height="@dimen/with_circle"
+                    >
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:src="@drawable/huongdan"
+                        android:layout_width="@dimen/with_icon"
+                        android:layout_height="@dimen/with_icon" />
+
+                </LinearLayout>
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="Help?"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
