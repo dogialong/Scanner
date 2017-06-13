@@ -2,7 +2,9 @@ package com.cst.scanner.BaseUI;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +16,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,9 +31,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -40,9 +47,11 @@ import android.widget.Toast;
 
 import com.cst.scanner.BaseUI.Helper.Constant;
 import com.cst.scanner.BaseUI.Helper.ImageHelper;
+import com.cst.scanner.R;
 import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.ActionSheetDialog;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +59,9 @@ import java.util.List;
 
 import static android.util.Patterns.EMAIL_ADDRESS;
 import static com.cst.scanner.BaseUI.Helper.Constant.CAMERA_REQUEST;
+import static com.cst.scanner.BaseUI.Helper.Constant.REQUEST_TAKE_GALLERY_VIDEO;
+import static com.cst.scanner.BaseUI.Helper.Constant.STORAGE_REQUEST;
+
 
 /**
  * Created by longdg on 10/01/2017.
@@ -61,6 +73,11 @@ public class BaseActivity extends AppCompatActivity {
     protected android.support.v4.app.FragmentManager fragmentManager;
     private static final int REQUEST_PERMISSIONS = 20;
     private static SharedPreferences prefences;
+    /*
+ * First check if device is supporting flashlight or not
+ */
+//    hasFlash = getApplicationContext().getPackageManager()
+//        .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -91,6 +108,14 @@ public class BaseActivity extends AppCompatActivity {
             } else {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
+            if (requestCode == STORAGE_REQUEST) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    Toast.makeText(this, "Cant save file.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
         } else {
             Log.d(TAG, "onRequestPermissionsResult: khong voa day");
         }
@@ -116,13 +141,25 @@ public class BaseActivity extends AppCompatActivity {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     Toast.makeText(this, "Please accept permission for Photo feauture.", Toast.LENGTH_SHORT).show();
                 }
-                requestPermissions(new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE}, CAMERA_REQUEST);
+                requestPermissions(new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST);
             }
         } else {
 
         }
     }
 
+    ConnectivityManager connManager;
+    NetworkInfo mWifi;
+    public boolean checkWifi () {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
 //    public String getLocation() {
 //        StringBuilder GPS = new StringBuilder();
 ////             Get the location manager
@@ -242,7 +279,45 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+    public void showGalleryVideo() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            //this code will be executed on devices running ICS or later
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                getVideoFromGallery();
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    Toast.makeText(this, "Please accept permission for Photo feauture.", Toast.LENGTH_SHORT).show();
+                }
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(this, "Please accept permission for Photo feauture.", Toast.LENGTH_SHORT).show();
+                }
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_TAKE_GALLERY_VIDEO);
+            }
+        } else {
+            getVideoFromGallery();
+        }
 
+    }
+    public void requirePermissionStorage () {
+        if (Build.VERSION.SDK_INT >= 23) {
+            //this code will be executed on devices running ICS or later
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    Toast.makeText(this, "Please accept permission for Photo feauture.", Toast.LENGTH_SHORT).show();
+                }
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(this, "Please accept permission for Photo feauture.", Toast.LENGTH_SHORT).show();
+                }
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST);
+            }
+        } else {
+
+        }
+    }
     public void showCameraPreview() {
         if (Build.VERSION.SDK_INT >= 19) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -270,6 +345,58 @@ public class BaseActivity extends AppCompatActivity {
         }
 //
     }
+    public void showDialogToTakePicture(int idView, final BaseFragment.IClick iclick, String nameTitle) {
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(idView);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+
+        dialog.findViewById(R.id.btnTakePicture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                iclick.click();
+            }
+        });
+
+//        TextView tvTitle = (TextView) dialog.findViewById(R.id.tvNameWSDialog);
+//        tvTitle.setText(nameTitle);
+        dialog.findViewById(R.id.btnGallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // delete food.
+                iclick.click2();
+                dialog.dismiss();
+//                showGallery();
+            }
+        });
+        dialog.show();
+    }
+    public void showDialog(int idView, final BaseFragment.IClick iclick, boolean isHasCancel) {
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(idView);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        if (isHasCancel) {
+            dialog.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        }
+        dialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // delete food.
+                iclick.click();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
 
     private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(this)
@@ -289,8 +416,23 @@ public class BaseActivity extends AppCompatActivity {
         }
         fTraf.commit();
     }
+    public static void navToByReplace(android.support.v4.app.FragmentManager fragmentManager, Fragment f, String fragmentTag,
+                                      String backStackTag, boolean isAddToStack, int containerViewId, int i) {
+        FragmentTransaction fTrans = fragmentManager.beginTransaction();
+        if (i==1){
+            fTrans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left);
+        }
+        else {
+            fTrans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_left, R.anim.exit_to_right);
+        }
+        fTrans.replace(containerViewId, f, fragmentTag);
+        if (isAddToStack) {
+            fTrans.addToBackStack(backStackTag);
+        }
+        fTrans.commit();
+    }
 
-    protected void navToByReplace(android.support.v4.app.FragmentManager fragmentManager1,Fragment f, String fragmentTag,
+    protected void navToByReplace(android.support.v4.app.FragmentManager fragmentManager1, Fragment f, String fragmentTag,
                                   String backStackTag, boolean isAddToStack, int containerViewId) {
         FragmentTransaction fTrans = fragmentManager1.beginTransaction();
         fTrans.replace(containerViewId, f, fragmentTag);
@@ -326,39 +468,6 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
-//    public void showDialogAddTextInfo(final ArrayList<String> arr, final BaseAdapter adapter, final String json, final ListView lv) {
-//        final String[] m_Text = {""};
-//        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.DialogTheme));
-//        builder.setTitle("Add Email");
-//
-//        final EditText input = new EditText(getApplicationContext());
-//        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-//        input.setTextColor(0x7f0a001b);
-//        input.setHint("Please enter your email");
-//        input.setHintTextColor(0x7f0a001b);
-//        builder.setView(input);
-//
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                m_Text[0] = input.getText().toString();
-//                if (checkForEmail(m_Text[0])) {
-//                    arr.add(m_Text[0]);
-//                    adapter.notifyDataSetChanged();
-//                    setListViewHeighBaseOnChildren(lv);
-//                    convertArrayToJson(json, arr);
-//                }
-//            }
-//        });
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//        builder.show();
-//    }
-
     public boolean checkForEmail(String str) {
         boolean isRight = false;
         if (EMAIL_ADDRESS.matcher(str).matches()) {
@@ -384,7 +493,7 @@ public class BaseActivity extends AppCompatActivity {
 //        Log.d(TAG, "convertArrayToJson: " + json);
 //    }
 
-//    public void convertArrayToJson1(String key, ArrayList arrObj) {
+    //    public void convertArrayToJson1(String key, ArrayList arrObj) {
 //
 //        SharedPreferences.Editor editor = getSharedPreferences(Constant.TAG_SHAREPREFERENCES, MODE_PRIVATE).edit();
 //        editor.putString(key,  new Gson().toJson(arrObj));
@@ -417,7 +526,19 @@ public class BaseActivity extends AppCompatActivity {
                 icon_resource,opts);
         return icon;
     }
-//    public Bitmap decodeBitmap (String file) {
+    public static String bitMapToString(Bitmap bitmap) {
+        if(bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            String temp = Base64.encodeToString(b, Base64.DEFAULT);
+            return temp;
+        } else {
+            return "";
+        }
+
+    }
+    //    public Bitmap decodeBitmap (String file) {
 //        BitmapFactory.Options opts = new BitmapFactory.Options();
 //        opts.inSampleSize = 16;
 //        Bitmap icon = BitmapFactory.decodeFile(file,opts);
@@ -529,6 +650,10 @@ public class BaseActivity extends AppCompatActivity {
                     Constant.GALLERY_PICTURE);
         } catch (ActivityNotFoundException e) {
         }
+    }
+    public void getVideoFromGallery () {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
     }
 
     public void ActionSheetDialogNoTitle(View v, final Activity activity, String[] stringItems) {
@@ -679,7 +804,7 @@ public class BaseActivity extends AppCompatActivity {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-//    protected Bitmap addWaterMark(Bitmap src) {
+    //    protected Bitmap addWaterMark(Bitmap src) {
 //        int w = src.getWidth();
 //        int h = src.getHeight();
 //        Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
@@ -701,5 +826,24 @@ public class BaseActivity extends AppCompatActivity {
         canvas.drawBitmap(logoImage, 0 ,canvas.getHeight()-logoImage.getHeight() ,null);
 
         return finalImage;
+    }
+    public static Matrix rotateImage (Uri uri) {
+        Matrix matrix = new Matrix();
+        try {
+            ExifInterface exif = new ExifInterface(uri.getPath());
+            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int rotationInDegrees = exifToDegrees(rotation);
+
+            if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return matrix;
+    }
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
     }
 }

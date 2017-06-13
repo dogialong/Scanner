@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Scanner</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="diachi">Địa chỉ</string>
+    <string name="muctieu">Mục tiêu</string>
+    <string name="thich">Thích chúng tôi trên Facebook</string>
+    <string name="cst">cstsolution.com</string>
+    <string name="btnScan">Scan Mới</string>
+    <string name="btnFolder">Tài liệu</string>
+    <string name="btnInfo">Về chúng tôi</string>
+    <string name="btnSupport">Hướng dẫn</string>
+    <string name="location">52 Cù Chính Lan, Khương Mai, Thanh Xuân, Hà Nội</string>
+    <string name="purpose">- Chúng tôi muốn xây dựng các ứng dụng đơn giản, thân thiện và phục vụ cuộc
+    sống hàng ngày. \n \n - Tất cả các ứng dụng đều được sử dụng miễn phí trong 1 tháng. Chúng tôi luôn mong
+    chờ phản hồi của người dùng để cải thiện sản phẩm.\n \n \n- Hãy liên hệ với chúng tôi:
+         <br/>
+    </string>
+    <string name="link">sales@cstsolution.com</string>
+    <!--<string name="purpose">- Our main purpose is to build mobile applications which are simple, friendly and useful for daily life.\n - All our applicaitons are free to download and use within a month.\r-->
+    <!--\n We always expect users'feedbacks in order to improve products better and better everday.\n \n Contact us: sales@cstsolution.com</string>-->
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="scanning">Scanning</string>
+    <string name="done">Save</string>
+    <string name="scan">Next</string>
+    <string name="cantCrop">Cant crop the image, change the points</string>
+    <string name="ok">Ok</string>
+    <string name="loading">Loading</string>
+    <string name="applying_filter">Applying filter</string>
+    <string name="low_memory">Low Memory</string>
+    <string name="low_memory_message">Your phone is low on memory, you may feel some lags while editing images.</string>
+
+
+</resources>

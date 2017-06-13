@@ -13,23 +13,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cst.scanner.BaseUI.BaseActivity;
+import com.cst.scanner.BaseUI.BaseFragment;
 import com.cst.scanner.BaseUI.Helper.Constant;
-import com.cst.scanner.BaseUI.Helper.ImageHelper;
 import com.cst.scanner.Database.DatabaseHandler;
-import com.cst.scanner.Model.FileObject;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener{
     private static final int REQUEST_CODE = 99;
     LinearLayout llAboutUs,llFiles,llNew,llHelp,llNav;
     RelativeLayout rlNav;
     TextView tvHomeBar;
-    Button btnHomeBar,btnBack;
+    public Button btnHomeBar,btnBack;
     public static MainActivity mainActivity;
     DatabaseHandler db ;
+    String fileOfImage;
     public static android.support.v4.app.FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         permissionsRequired();
         mainActivity = this;
         db = new DatabaseHandler(getApplicationContext());
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateandTime = sdf.format(new Date());
+        fileOfImage = "Doc_" + currentDateandTime;
         fragmentManager = getSupportFragmentManager();
         rlNav = (RelativeLayout) findViewById(R.id.bg_mavigation_top);
         llAboutUs = (LinearLayout) findViewById(R.id.llAboutus);
@@ -101,9 +105,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 navToByReplace(fragmentManager,new FAboutUs(),"FAboutUs","FAboutUs",true,R.id.main_contain);
                 break;
             case R.id.llNew:
-                resetBackgroundCircle();
                 llNew.setBackgroundResource(R.drawable.circle_red);
-                startScan(Constant.OPEN_CAMERA);
+                showDialogToTakePicture(R.layout.dialog_select_image, new BaseFragment.IClick() {
+                    @Override
+                    public void click() {
+                        Intent i = new Intent(MainActivity.this,AutoScanActivity.class);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void click2() {
+                        startScan(Constant.OPEN_MEDIA);
+                    }
+                },"");
+
                 break;
             case R.id.llHelp:
                 resetBackgroundCircle();
@@ -129,8 +144,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 getContentResolver().delete(uri, null, null);
-                String filePath = ImageHelper.saveImage(bitmap,"ScannerApp");
-                db.addImage(new FileObject(filePath.substring(31,filePath.length()-1),filePath,"20170505","lock"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

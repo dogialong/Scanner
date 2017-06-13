@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Vector;
 
 public class Imgproc {
-    private static final int
+    public static final int
             IPL_BORDER_CONSTANT = 0,
             IPL_BORDER_REPLICATE = 1,
             IPL_BORDER_REFLECT = 2,
@@ -786,7 +786,7 @@ public class Imgproc {
     }
 
     //javadoc: GaussianBlur(src, dst, ksize, sigmaX)
-    public static void GaussianBlur(Mat src, Mat dst, Size ksize, double sigmaX)
+    public static void  GaussianBlur(Mat src, Mat dst, Size ksize, double sigmaX)
     {
         
         GaussianBlur_2(src.nativeObj, dst.nativeObj, ksize.width, ksize.height, sigmaX);

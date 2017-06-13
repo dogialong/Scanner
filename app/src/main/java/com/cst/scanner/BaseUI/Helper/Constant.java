@@ -13,4 +13,6 @@ public class Constant {
     public static final int GALLERY_PICTURE = 10;
     public final static int OPEN_CAMERA = 4;
     public final static int OPEN_MEDIA = 5;
+    public static final int STORAGE_REQUEST = 12;
+    public static final int REQUEST_TAKE_GALLERY_VIDEO = 11;
 }

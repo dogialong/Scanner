@@ -9,6 +9,11 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        ndk
+                {
+                    moduleName "Scanner"
+                }
+        multiDexEnabled = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets.main
+            {
+                jni.srcDirs = []
+                jniLibs.srcDir 'src/main/libs'
+            }
 }
 
 dependencies {
@@ -24,14 +34,18 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile project(':scanlibrary')
+    compile project(':openCVLibrary300')
     compile 'com.flyco.dialog:FlycoDialog_Lib:1.3.2@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.google.android.gms:play-services:10.2.6'
     testCompile 'junit:junit:4.12'
-    compile project(':openCVLibrary300')
+    compile 'com.android.support:multidex:1.0.1'
+    compile project(path: ':scanlibrary')
 }

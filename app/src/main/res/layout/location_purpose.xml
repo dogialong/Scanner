@@ -29,11 +29,24 @@
             android:lineSpacingExtra="5dp"
             android:textSize="15sp"
             android:padding="10dp"
-            android:text="- Our main purpose is to build mobile applications which are simple, friendly and useful for daily life.\n- All our applicaitons are free to download and use within a month.\r
-     \n- We always expect users'feedbacks in order to improve products better and better everday.
+            android:text="@string/purpose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-\n\nContact us: sales@cstsolution.com"
+        <TextView
+            android:layout_below="@id/tvPurpose"
+            android:id="@+id/tvEmail"
+            android:visibility="gone"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorBlue"
+            android:lineSpacingExtra="5dp"
+            android:textSize="15sp"
+            android:padding="10dp"
+            android:text="@string/link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </RelativeLayout>
+
 </LinearLayout>

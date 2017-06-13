@@ -150,7 +150,7 @@ public class ScanFragment extends Fragment {
         }
         return orderedPoints;
     }
-
+    // ham next o day
     private class ScanButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {

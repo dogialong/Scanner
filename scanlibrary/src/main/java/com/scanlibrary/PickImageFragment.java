@@ -7,6 +7,7 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -181,13 +182,36 @@ public class PickImageFragment extends Fragment {
         Bitmap original
                 = BitmapFactory.decodeFileDescriptor(
                 fileDescriptor.getFileDescriptor(), null, options);
-        Matrix matrix = new Matrix();
+        Matrix matrix;
+        Bitmap rotatedBitmap = null;
+        try {
+            ExifInterface exif = new ExifInterface(selectedimg.getPath());
 
-        matrix.postRotate(90);
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
 
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(original,original.getWidth(),original.getHeight(),true);
+            Log.d("EXIF", "Exif: " + orientation);
+            matrix = new Matrix();
+            if (orientation == 0) {
 
-        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    matrix.postRotate(90);
+                }
+            }
+            if (orientation == 6) {
+                matrix.postRotate(90);
+            } else if (orientation == 3) {
+                matrix.postRotate(180);
+            } else if (orientation == 8) {
+                matrix.postRotate(270);
+            }
+
+
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(original, original.getWidth(), original.getHeight(), true);
+            rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return rotatedBitmap;
     }
 }

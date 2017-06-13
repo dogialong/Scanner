@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Scanner</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="diachi">Location</string>
+    <string name="muctieu">Purpose</string>
+    <string name="thich">Like us in Facebook</string>
+    <string name="cst">cstsolution.com</string>
+    <string name="location">52 Cu Chinh Lan Street, Khuong Mai Ward, Thanh Xuan District, Hanoi, Vietnam</string>
+    <string name="btnScan">New</string>
+    <string name="btnFolder">Files</string>
+    <string name="btnInfo">About us</string>
+    <string name="btnSupport">Help?</string>
+    <string name="link">sales@cstsolution.com</string>
+    <string name="purpose">- Our main purpose is to build mobile applications which are simple, friendly and useful for daily life.\n \n - All our applicaitons are free to download and use within a month. We always expect users feedbacks in order to improve products better and better everday.\n \n \n - Contact us: sales@cstsolution.com</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="scanning">Scanning</string>
+    <string name="done">Save</string>
+    <string name="scan">Next</string>
+    <string name="cantCrop">Cant crop the image, change the points</string>
+    <string name="ok">Ok</string>
+    <string name="loading">Loading</string>
+    <string name="applying_filter">Applying filter</string>
+    <string name="low_memory">Low Memory</string>
+    <string name="low_memory_message">Your phone is low on memory, you may feel some lags while editing images.</string>
+
+    </resources>

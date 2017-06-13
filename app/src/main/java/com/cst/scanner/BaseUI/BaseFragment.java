@@ -3,6 +3,7 @@ package com.cst.scanner.BaseUI;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -26,6 +29,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
@@ -49,6 +54,7 @@ import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -218,6 +224,25 @@ public class BaseFragment extends Fragment {
             fTrans.addToBackStack(backStackTag);
         }
         fTrans.commit();
+    }
+    public static Matrix rotateImage (Uri uri) {
+        Matrix matrix = new Matrix();
+        try {
+            ExifInterface exif = new ExifInterface(uri.getPath());
+            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int rotationInDegrees = exifToDegrees(rotation);
+
+            if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return matrix;
+    }
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
     }
 
     public static String getPathStorageImageViewDrawCanvas(ImageView imageView, String nameFolder) {
@@ -402,6 +427,7 @@ public class BaseFragment extends Fragment {
     }
     public interface IClick {
     void click();
+        void click2();
 }
 //    public void showDialog(int idView, final IClick iclick, boolean isHasCancel,String nameTitle) {
 //        final Dialog dialog = new Dialog(getContext());
@@ -495,6 +521,30 @@ public class BaseFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+    }
+    public void showDialog(int idView, final BaseFragment.IClick iclick, boolean isHasCancel) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(idView);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        if (isHasCancel) {
+            dialog.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        }
+        dialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // delete food.
+                iclick.click();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     public void showDialogAddTextInfo() {

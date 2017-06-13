@@ -62,7 +62,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
                     android:textColor="@color/colorWhite"
-                    android:text="New"
+                    android:text="@string/btnScan"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp" />
             </LinearLayout>
@@ -92,7 +92,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
                     android:textColor="@color/colorWhite"
-                    android:text="Files"
+                    android:text="@string/btnFolder"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp" />
             </LinearLayout>
@@ -131,7 +131,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
                     android:textColor="@color/colorWhite"
-                    android:text="About us"
+                    android:text="@string/btnInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp" />
             </LinearLayout>
@@ -162,7 +162,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
                     android:textColor="@color/colorWhite"
-                    android:text="Help?"
+                    android:text="@string/btnSupport"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp" />
             </LinearLayout>

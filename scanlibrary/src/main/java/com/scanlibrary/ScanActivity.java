@@ -120,7 +120,7 @@ public class ScanActivity extends Activity implements IScanner, ComponentCallbac
     public native Bitmap getBWBitmap(Bitmap bitmap);
 
     public native float[] getPoints(Bitmap bitmap);
-    public native void find_squares();
+
     static {
         System.loadLibrary("opencv_java3");
         System.loadLibrary("Scanner");

@@ -2,26 +2,28 @@ package com.cst.scanner.Custom;
 
 import android.content.Context;
 import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
+import android.icu.text.SimpleDateFormat;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 
 import org.opencv.android.JavaCameraView;
 
+import java.io.File;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class TakePictureView extends JavaCameraView implements PictureCallback {
+public class TakePictureView extends JavaCameraView implements Camera.PictureCallback {
 
-    private static final String TAG = "Tutorial3View";
-    private String mPictureFileName;
-
+    private static final String TAG = "Sample::Tutorial2View";
+    public String mPictureFileName = "";
+    private Context myreference;
+    public static boolean isFlashLightON = true;
     public TakePictureView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.myreference = context;
     }
 
     public List<String> getEffectList() {
@@ -57,13 +59,34 @@ public class TakePictureView extends JavaCameraView implements PictureCallback {
         return mCamera.getParameters().getPreviewSize();
     }
 
-    public void takePicture(String fileName) {
+    // Setup the camera
+    public void setupCameraFlashLight() {
+        Camera  camera = mCamera;
+        if (camera != null) {
+            Camera.Parameters params = camera.getParameters();
+
+            if (params != null) {
+                if (isFlashLightON) {
+                    isFlashLightON = false;
+                    params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    camera.setParameters(params);
+                    camera.startPreview();
+                } else {
+                    isFlashLightON = true;
+                    params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    camera.setParameters(params);
+                    camera.startPreview();
+
+                }
+            }
+        }
+
+    }
+
+    public void takePicture() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateandTime = sdf.format(new Date());
-        fileName = Environment.getExternalStorageDirectory().getPath() +
-                "/sample_picture_" + currentDateandTime + ".jpg";
-        Log.i(TAG, "Taking picture");
-        this.mPictureFileName = fileName;
+        mPictureFileName = setFileName();
         // Postview and jpeg are sent in the same buffers if the queue is not empty when performing a capture.
         // Clear up buffers to avoid mCamera.takePicture to be stuck because of a memory issue
         mCamera.setPreviewCallback(null);
@@ -89,5 +112,14 @@ public class TakePictureView extends JavaCameraView implements PictureCallback {
             Log.e("PictureDemo", "Exception in photoCallback", e);
         }
 
+    }
+    public String setFileName() {
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateandTime = sdf.format(new Date());
+        String filename = "Doc_" + currentDateandTime + ".jpg";
+        final File file = new File(path, filename);
+        filename = file.getAbsolutePath().toString();
+        return filename;
     }
 }

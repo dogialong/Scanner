@@ -2,7 +2,6 @@ package com.cst.scanner.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +42,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         FileObject obj = arr.get(position);
-        holder.title.setText(obj.getNameFile().substring(31,obj.getNameFile().length()));
-        Log.d("MainAdapter", "onBindViewHolder: " + obj.getNameFile() + "  " + obj.getPathFile());
-        Picasso.with(context).load("file://" + obj.getNameFile()).fit().centerCrop().into(holder.icon);
+        holder.title.setText(obj.getNameFile().substring(0,14));
+        holder.tvTime.setText(obj.getNameFile().substring(15,20));
+        Picasso.with(context).load("file://" + obj.getPathFile()).fit().centerCrop().into(holder.icon);
 //        holder.icon.setImageResource(obj.getRes());
         holder.title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iListViewClick.onClick(view,position);
+            }
+        });
+        holder.tvTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 iListViewClick.onClick(view,position);
@@ -59,20 +64,40 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
                 iListViewClick.onClick(view,position);
             }
         });
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iListViewClick.onClick(view,position);
+            }
+        });
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iListViewClick.onClick(view,position);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return arr.size();
     }
+    public void loadNewList(List<FileObject> arr) {
+        this.arr.clear();
+        this.arr.addAll(arr);
+        notifyDataSetChanged();
 
+    }
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView icon;
-        public TextView title;
+        public ImageView icon,delete,share;
+        public TextView title,tvTime;
         public MyViewHolder(View itemView) {
             super(itemView);
             icon = (ImageView) itemView.findViewById(R.id.ivIcon);
             title = (TextView) itemView.findViewById(R.id.tvTitle);
+            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
+            delete = (ImageView) itemView.findViewById(R.id.share);
+            share = (ImageView) itemView.findViewById(R.id.delete);
         }
     }
 }

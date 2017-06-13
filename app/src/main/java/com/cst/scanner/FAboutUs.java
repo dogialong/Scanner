@@ -1,6 +1,7 @@
 package com.cst.scanner;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,7 +37,7 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
     RelativeLayout rlLocation,rlPurpose,rlLikeusFb,rlCst;
-    LinearLayout llAbout;
+    LinearLayout llAbout,llHelps,llScan,llFiles;
     public FAboutUs() {
         // Required empty public constructor
     }
@@ -89,7 +90,14 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
         rlLikeusFb.setOnClickListener(this);
         rlCst = (RelativeLayout) view.findViewById(R.id.rl4);
         rlCst.setOnClickListener(this);
-        MainActivity.getInstance().getTitleBarTop().setText("About us");
+        llHelps = (LinearLayout) view.findViewById(R.id.llHelps);
+        llHelps.setOnClickListener(this);
+        llFiles = (LinearLayout) view.findViewById(R.id.llFiles);
+        llFiles.setOnClickListener(this);
+        llScan = (LinearLayout) view.findViewById(R.id.llScan);
+        llScan.setOnClickListener(this);
+
+        MainActivity.getInstance().getTitleBarTop().setText(R.string.btnInfo);
         MainActivity.getInstance().getButtonBack().setVisibility(View.VISIBLE);
         MainActivity.getInstance().getNavTop().setVisibility(View.VISIBLE);
         MainActivity.getInstance().getButtonBack().setOnClickListener(new View.OnClickListener() {
@@ -112,14 +120,12 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.getInstance().getTitleBarTop().setText("About us");
+        MainActivity.getInstance().getTitleBarTop().setText(R.string.btnInfo);
         MainActivity.getInstance().getNavTop().setVisibility(View.VISIBLE);
         MainActivity.getInstance().getRelaNavTop().setBackgroundColor(getResources().getColor(R.color.colorNav1));
         MainActivity.getInstance().getButtonBac1k().setVisibility(View.GONE);
         MainActivity.getInstance().getButtonBack().setVisibility(View.VISIBLE);
 
-//        MainActivity.getInstance().getNavTop().setBackgroundColor(getResources().getColor(R.color.colorBgAbout));
-//        MainActivity.getInstance().getTitleBarTop().setText("");
 
     }
 
@@ -144,8 +150,10 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
         switch (view.getId()) {
             case R.id.rl1:
                 MainActivity.getInstance().getButtonBack().setVisibility(View.GONE);
-                navToByReplace(MainActivity.getInstance().getSupportFragmentManager(),new FLocationAndPurpose(),
-                        "FLocationAndPurpose","FLocationAndPurpose",true,R.id.rlFabout,1);
+//                navToByReplace(MainActivity.getInstance().getSupportFragmentManager(),new FLocationAndPurpose(),
+//                        "FLocationAndPurpose","FLocationAndPurpose",true,R.id.rlFabout,1);
+                Intent i = new Intent(getActivity(),AddressActivity.class);
+                startActivity(i);
                 Singleton.getGetInstance().isLocation = true;
                 break;
             case R.id.rl2:
@@ -160,6 +168,29 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
                 break;
             case R.id.rl4:
                 goToUrl("http://cstsolution.com");
+                break;
+            case R.id.llScan:
+                resetColor();
+                llScan.setBackgroundColor(getResources().getColor(R.color.colorRed));
+                Intent intent = new Intent(getActivity(),AutoScanActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.llFiles:
+                resetColor();
+                llFiles.setBackgroundColor(getResources().getColor(R.color.colorRed));
+
+                MainActivity.getInstance().getButtonBack().setVisibility(View.GONE);
+                navToByReplace(MainActivity.getInstance().getSupportFragmentManager(),new FStorage(),
+                        "FStorage","FStorage",true,R.id.rlFabout,1);
+                Singleton.getGetInstance().isLocation = false;
+                break;
+            case R.id.llHelps:
+                resetColor();
+                llHelps.setBackgroundColor(getResources().getColor(R.color.colorRed));
+
+                MainActivity.getInstance().getButtonBack().setVisibility(View.GONE);
+                navToByReplace(MainActivity.getInstance().getSupportFragmentManager(),new FragmentHelps(),
+                        "FragmentHelps","FragmentHelps",true,R.id.rlFabout,1);
                 break;
             default:break;
         }
@@ -178,5 +209,12 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public void resetColor() {
+        llAbout.setBackgroundColor(getResources().getColor(R.color.colorNav2));
+        llFiles.setBackgroundColor(getResources().getColor(R.color.colorNav2));
+        llHelps.setBackgroundColor(getResources().getColor(R.color.colorNav2));
+        llScan.setBackgroundColor(getResources().getColor(R.color.colorNav2));
+
     }
 }

@@ -7,6 +7,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
+        android:id="@+id/rlFiles"
         android:background="@drawable/background_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,22 +19,23 @@
             android:layout_width="match_parent"
             android:layout_height="60dp">
             <LinearLayout
+                android:id="@+id/llScan"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <Button
+                <TextView
                     android:background="@drawable/print_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/llFile"
+                android:id="@+id/llFiles"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <Button
+                <TextView
                     android:background="@drawable/openfile"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
@@ -44,17 +46,18 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <Button
+                <TextView
                     android:background="@drawable/info"
                     android:layout_width="10dp"
                     android:layout_height="30dp" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/llHelps"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <Button
+                <TextView
                     android:background="@drawable/huongdan"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />

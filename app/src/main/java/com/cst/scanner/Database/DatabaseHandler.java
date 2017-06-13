@@ -48,8 +48,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void addImage(FileObject object) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME,object.getNameFile());
         values.put(KEY_PATH,object.getPathFile());
+        values.put(KEY_NAME,object.getNameFile());
         values.put(KEY_DATE,object.getDateFile());
         values.put(KEY_STATUS,object.getStatus());
         db.insert(NAME_TABLE,null,values);
@@ -59,7 +59,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public FileObject getObject(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(NAME_TABLE, new String[]{KEY_NAME,KEY_PATH,KEY_DATE,KEY_STATUS},KEY_NAME + "=?",
+        Cursor cursor = db.query(NAME_TABLE, new String[]{KEY_PATH,KEY_NAME,KEY_DATE,KEY_STATUS},KEY_NAME + "=?",
                 new String[]{name},null,null,null,null);
         if(cursor != null) {
             cursor.moveToFirst();
@@ -74,7 +74,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query,null);
         if(cursor.moveToFirst()) {
             do {
-                FileObject object  = new FileObject(cursor.getString(1),cursor.getString(0),cursor.getString(2),cursor.getString(3));
+                FileObject object  = new FileObject(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+                object.setId(cursor.getInt(0));
                 fileObjects.add(object);
             }
             while (cursor.moveToNext());
@@ -92,9 +93,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return db.update(NAME_TABLE,values,KEY_NAME + "=?" , new String[] {object.getNameFile()});
 
     }
-    public void deleteObject (FileObject object) {
+
+    public void deleteObject(FileObject contact) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(NAME_TABLE,KEY_NAME + "=?", new String[]{object.getNameFile()});
+        db.delete(NAME_TABLE, KEY_ID + " = ?",
+                new String[] { String.valueOf(contact.getId()) });
         db.close();
     }
+
 }

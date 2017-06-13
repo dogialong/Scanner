@@ -5,13 +5,14 @@ package com.cst.scanner.Model;
  */
 
 public class FileObject {
+    int id;
     private String nameFile,dateFile,status,pathFile;
 
-    public FileObject(String nameFile,String pathFile  ,String dateFile ,String status) {
+    public FileObject(String pathFile,String nameFile  ,String dateFile ,String status) {
+        this.pathFile = pathFile;
         this.nameFile = nameFile;
         this.dateFile = dateFile;
         this.status = status;
-        this.pathFile = pathFile;
     }
 
     public String getPathFile() {
@@ -44,5 +45,13 @@ public class FileObject {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

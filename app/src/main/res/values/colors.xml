@@ -1,11 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorBlue">#cc3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBgAbout">#313131</color>
     <color name="colorNav1">#878585</color>
+    <color name="colorNav2">#454545</color>
     <color name="colorRed">#f54747</color>
     <color name="colorTvRed">#cce85858</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="start_up_my_class">#d83327</color>
+    <color name="start_up_scheduling">#e98a24</color>
+    <color name="start_up_e_library">#0caa61</color>
+
+    <color name="login_text_color">#c2d2d3d4</color>
+    <color name="color_pending">#bfbfbf</color>
+    <color name="color_confirm">#3FA06A</color>
+    <color name="white_color">#ffffff</color>
+    <color name="facebook_color">#E8EAED</color>
+    <color name="black_color">#000000</color>
+    <color name="black_color1">#a2000000</color>
+    <color name="create_messages_backgroud">#faaf3c</color>
+    <color name="past_messages_backgroud">#f39425</color>
+    <color name="calender_background">#f39d1f</color>
+    <color name="color_item_name_class_normal">#f2f2f2</color>
+    <color name="color_item_name_class_click">#DBD2D2</color>
+    <color name="blue">#ff59a9ff</color>
+    <color name="orange">#ffff900d</color>
+    <color name="bottom_background_color">#ffc4c2bc</color>
+
+    <color name="polygonViewCircleStrokeColor">#ff59a9ff</color>
+    <color name="polygonViewCircleBackground">#90e5f8ff</color>
+    <color name="cornflower_blue">#6274e2</color>
+    <color name="cornflower_blue_dark">#303F9F</color>
+    <color name="cornflower_blue_darkest">#2d3a93</color>
+    <color name="gray">#ebebeb</color>
+    <color name="gray_light">#e8e8e8</color>
+    <color name="gray_transparent">#a6efefef</color>
+    <color name="gray_dark">#858585</color>
+    <color name="gray_dark_transparent">#ae858585</color>
+    <color name="gray_darkest">#ae282828</color>
+    <color name="black">#000000</color>
+    <color name="black_10">#19000000</color>
+    <color name="ivory">#f8efe6</color>
+    <color name="ivory_dark">#f7e8d9</color>
+    <color name="green">#38be55</color>
+    <color name="green_dark">#2da346</color>
+    <color name="red">#e94f4f</color>
+    <color name="brown">#4e342e</color>
+
 </resources>
