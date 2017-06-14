@@ -373,7 +373,7 @@ public class BaseActivity extends AppCompatActivity {
         });
         dialog.show();
     }
-    public void showDialog(int idView, final BaseFragment.IClick iclick, boolean isHasCancel) {
+    public void showDialog(int idView, final IClick iclick, boolean isHasCancel) {
         final Dialog dialog = new Dialog(this);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(idView);
@@ -396,6 +396,10 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+    public interface IClick {
+        void click();
+        void click2();
     }
 
     private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {

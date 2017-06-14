@@ -3,6 +3,7 @@ package com.cst.scanner;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -20,11 +21,15 @@ import android.widget.Toast;
 
 import com.cst.scanner.Adapter.ImageAdapter;
 import com.cst.scanner.BaseUI.BaseActivity;
+import com.cst.scanner.BaseUI.Helper.Singleton;
 import com.cst.scanner.Custom.TakePictureView;
 import com.cst.scanner.Database.DatabaseHandler;
 import com.cst.scanner.Delegate.IListViewClick;
 import com.cst.scanner.Model.FileObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
@@ -114,7 +119,9 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
     private boolean isFlashOn;
     private boolean hasFlash;
     Camera.Parameters params;
+    public static AutoScanActivity autoScanActivity;
     private boolean isAutoScan = true;
+    private ArrayList<String> arrLinkPath ;
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -153,10 +160,12 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_my);
         // get the OverlayView responsible for displaying images on top of the camera
+        autoScanActivity = this;
         db = new DatabaseHandler(getApplicationContext());
+        arrLinkPath = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateandTime = sdf.format(new Date());
-        fileOfImage = "Doc_" + currentDateandTime;
+        fileOfImage = "Doc " + currentDateandTime;
 
 
         // check device has flash
@@ -190,7 +199,24 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         llV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                JSONObject json = new JSONObject();
+                try {
+                    json.put(Singleton.getGetInstance().key_json, new JSONArray(arrLinkPath));
+                    String link_array = json.toString();
+                    db.addImage(new FileObject(filename,fileOfImage,"","",link_array));
+                    arrLinkPath.clear();
+                    Singleton.getGetInstance().arrayList.add(new FileObject(filename,
+                            fileOfImage,"das","dasd",link_array));
+                    Singleton.getGetInstance().arrayList.remove(Singleton.getGetInstance().arrayList.size()-1);
+                    if(handler != null) {
+                        handler.removeCallbacksAndMessages(null);
+                    }
+                    Singleton.getGetInstance().where = "ScanActivity";
+                    Intent i = new Intent(AutoScanActivity.this,ActivitySlider.class);
+                    startActivity(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         llFlash.setOnClickListener(new View.OnClickListener() {
@@ -212,9 +238,10 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
 //                mOpenCvCameraView.takePicture();
                 filename = setFileName();
                 Imgcodecs.imwrite(filename, image);
-                db.addImage(new FileObject(filename,fileOfImage,"",""));
-                arrstamp.add(new FileObject(filename,
-                        fileOfImage,"das","dasd"));
+                arrLinkPath.add(filename);
+//                db.addImage(new FileObject(filename,fileOfImage,"",""));
+                Singleton.getGetInstance().arrayList.add(new FileObject(filename,
+                        fileOfImage,"","",""));
                 adapterImage.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), "Taking", Toast.LENGTH_SHORT).show();
             }
@@ -227,7 +254,9 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                     imgAuto.setImageResource(R.drawable.ic_auto_on);
 
                 } else {
-                    handler.removeCallbacksAndMessages(null);
+                    if(handler != null) {
+                        handler.removeCallbacksAndMessages(null);
+                    }
                     imgAuto.setImageResource(R.drawable.ic_auto);
                 }
             }
@@ -253,9 +282,16 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         lvImage = (ListView) findViewById(R.id.lv);
         arrstamp = new ArrayList<>();
 
-        adapterImage = new ImageAdapter(getApplicationContext(), arrstamp, new IListViewClick() {
+        adapterImage = new ImageAdapter(getApplicationContext(), arrLinkPath, new IListViewClick() {
             @Override
             public void onClick(View v, int position) {
+                if (handler != null) {
+                    handler.removeCallbacksAndMessages(null);
+                }
+                Singleton.getGetInstance().isStorage = false;
+                Singleton.getGetInstance().where ="adapterImage";
+                Intent i = new Intent(AutoScanActivity.this,ActivitySlider.class);
+                startActivity(i);
 
             }
         });
@@ -269,12 +305,12 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         super.onPause();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
+        System.gc();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
@@ -300,6 +336,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
     }
 
     public void onCameraViewStopped() {
+        System.gc();
     }
     List<MatOfPoint> squares = new ArrayList<MatOfPoint>();
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
@@ -314,7 +351,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
 //        Imgproc.drawContours(image, squares, -1, new Scalar(0,0,255));
             findLargesSquares(squares,image);
         }
-
+        System.gc();
         return image;
 
     }
@@ -348,7 +385,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         return outputMat;
     }
 
-    int thresh = 50, N = 3;
+    int thresh = 50, N = 5;
     // helper function:
     // finds a cosine of angle between vectors
     // from pt0->pt1 and from pt0->pt2
@@ -437,6 +474,11 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                 }
             }
         }
+        image.release();
+        gray.release();
+        gray0.release();
+        smallerImg.release();
+        System.gc();
     }
 
 
@@ -482,12 +524,15 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                                public void run() {
                                    Imgproc.cvtColor(mInter, mInter, Imgproc.COLOR_RGB2BGR);
                                    Imgcodecs.imwrite(filename, mInter);
-                                   db.addImage(new FileObject(filename,fileOfImage,"",""));
-                                   arrstamp.add(new FileObject(filename,
-                                           fileOfImage,"das","dasd"));
+                                   arrLinkPath.add(filename);
                                    adapterImage.notifyDataSetChanged();
+                                   Singleton.getGetInstance().arrayList.add(new FileObject(filename,
+                                           fileOfImage,"","",""));
+                                   mInter.release();
                                    Toast.makeText(getApplicationContext(), "Taking", Toast.LENGTH_SHORT).show();
-                                   handler.removeCallbacksAndMessages(null);
+                                   if(handler !=null) {
+                                       handler.removeCallbacksAndMessages(null);
+                                   }
                                }
                            },3000);
 
@@ -525,12 +570,23 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
     }
     public String setFileName() {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateandTime = sdf.format(new Date());
-        String filename = "Doc_" + currentDateandTime + ".jpg";
+        String filename = "Doc " + currentDateandTime + ".jpg";
         final File file = new File(path, filename);
         filename = file.getAbsolutePath().toString();
         return filename;
     }
 
+    public static AutoScanActivity getInstance() {
+        return autoScanActivity;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(Singleton.getGetInstance().arrayList !=null) {
+            Singleton.getGetInstance().arrayList.clear();
+        }
+    }
 }

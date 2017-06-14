@@ -225,6 +225,15 @@ public class BaseFragment extends Fragment {
         }
         fTrans.commit();
     }
+    protected void navToByReplace(android.support.v4.app.FragmentManager fragmentManager1, Fragment f, String fragmentTag,
+                                  String backStackTag, boolean isAddToStack, int containerViewId) {
+        FragmentTransaction fTrans = fragmentManager1.beginTransaction();
+        fTrans.replace(containerViewId, f, fragmentTag);
+        if (isAddToStack) {
+            fTrans.addToBackStack(backStackTag);
+        }
+        fTrans.commit();
+    }
     public static Matrix rotateImage (Uri uri) {
         Matrix matrix = new Matrix();
         try {

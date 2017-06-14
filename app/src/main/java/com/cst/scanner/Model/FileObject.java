@@ -6,13 +6,22 @@ package com.cst.scanner.Model;
 
 public class FileObject {
     int id;
-    private String nameFile,dateFile,status,pathFile;
+    private String nameFile,dateFile,status,pathFile,image;
 
-    public FileObject(String pathFile,String nameFile  ,String dateFile ,String status) {
+    public FileObject(String pathFile,String nameFile  ,String dateFile ,String status,String image) {
         this.pathFile = pathFile;
         this.nameFile = nameFile;
         this.dateFile = dateFile;
         this.status = status;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getPathFile() {

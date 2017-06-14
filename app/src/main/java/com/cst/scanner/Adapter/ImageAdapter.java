@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.cst.scanner.Delegate.IListViewClick;
-import com.cst.scanner.Model.FileObject;
 import com.cst.scanner.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,10 +18,10 @@ import java.util.ArrayList;
  */
 
 public class ImageAdapter extends BaseAdapter {
-    ArrayList<FileObject> objs;
+    ArrayList<String> objs;
     Context context;
     IListViewClick iListViewClick;
-    public ImageAdapter(Context context, ArrayList<FileObject> objs,IListViewClick iListViewClick) {
+    public ImageAdapter(Context context, ArrayList<String> objs,IListViewClick iListViewClick) {
         this.objs = objs;
         this.context = context;
         this.iListViewClick = iListViewClick;
@@ -55,7 +54,14 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             holder = (LVViewHolder) convertView.getTag();
         }
-        Picasso.with(context).load("file://" + objs.get(position).getPathFile()).fit().centerCrop().into(holder.img);
+
+        Picasso.with(context).load("file://" + objs.get(position)).fit().centerCrop().into(holder.img);
+        holder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iListViewClick.onClick(view,position);
+            }
+        });
         return convertView;
     }
 

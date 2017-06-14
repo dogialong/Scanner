@@ -102,6 +102,13 @@ public class FStorage extends BaseFragment implements View.OnClickListener{
             @Override
             public void onClick(View v, final int position) {
                 switch (v.getId()) {
+                    case R.id.ivIcon:
+                        Singleton.getGetInstance().isStorage = true;
+                        Singleton.getGetInstance().positionSeleted = position;
+                        Singleton.getGetInstance().where = "Document";
+                        Intent intent = new Intent(getActivity(),ActivitySlider.class);
+                        startActivity(intent);
+                        break;
                     case R.id.share:
                         break;
                     case R.id.delete:

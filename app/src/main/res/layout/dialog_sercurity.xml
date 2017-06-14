@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_color"
+    xmlns:foo="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+   >
+    <TextView
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:id="@+id/tvRequestName"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="Password must include 6 symbol"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/white_color"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+   <LinearLayout
+       android:weightSum="1"
+       android:layout_width="match_parent"
+       android:layout_height="40dp">
+       <Button
+           android:visibility="gone"
+           android:background="?android:attr/selectableItemBackground"
+           android:layout_gravity="center"
+           android:gravity="center"
+           android:textAllCaps="false"
+           android:text="Cancel"
+           android:id="@+id/btnCancel"
+           android:layout_weight="1"
+           android:textColor="@color/white_color"
+           android:layout_width="0dp"
+           android:layout_height="40dp" />
+       <Button
+           android:background="?android:attr/selectableItemBackground"
+           android:layout_gravity="center"
+           android:gravity="center"
+           android:textAllCaps="false"
+           android:text="Ok"
+           android:textColor="@color/black"
+           android:id="@+id/btnOk"
+           android:layout_weight="1"
+           android:layout_width="0dp"
+           android:layout_height="40dp" />
+   </LinearLayout>
+    <View
+        android:background="@color/color_pending"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>

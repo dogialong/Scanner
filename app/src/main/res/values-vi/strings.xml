@@ -20,7 +20,7 @@
     <string name="link">sales@cstsolution.com</string>
     <!--<string name="purpose">- Our main purpose is to build mobile applications which are simple, friendly and useful for daily life.\n - All our applicaitons are free to download and use within a month.\r-->
     <!--\n We always expect users'feedbacks in order to improve products better and better everday.\n \n Contact us: sales@cstsolution.com</string>-->
-
+    <string name="new_pass">Mật khẩu mới</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="scanning">Scanning</string>

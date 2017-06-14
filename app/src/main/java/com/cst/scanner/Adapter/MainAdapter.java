@@ -8,10 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cst.scanner.BaseUI.Helper.Singleton;
 import com.cst.scanner.Delegate.IListViewClick;
 import com.cst.scanner.Model.FileObject;
 import com.cst.scanner.R;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -42,9 +47,22 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         FileObject obj = arr.get(position);
+        JSONObject json = null;
+        String linkPath = "";
+        JSONArray items;
+        try {
+            json = new JSONObject(obj.getImage());
+            items = json.getJSONArray(Singleton.getGetInstance().key_json);
+            linkPath = items.getString(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         holder.title.setText(obj.getNameFile().substring(0,14));
-        holder.tvTime.setText(obj.getNameFile().substring(15,20));
-        Picasso.with(context).load("file://" + obj.getPathFile()).fit().centerCrop().into(holder.icon);
+        String time = obj.getNameFile().substring(15,20);
+        time = time.replace("-",":");
+        holder.tvTime.setText(time);
+        Picasso.with(context).load("file://" + linkPath).fit().centerCrop().into(holder.icon);
 //        holder.icon.setImageResource(obj.getRes());
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override

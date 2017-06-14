@@ -27,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_NAME = "name";
     private static final String KEY_DATE = "date";
     private static final String KEY_STATUS = "status";
+    private static final String KEY_ARRAY_IMAGE = "image";
 
 
     public DatabaseHandler(Context context) {
@@ -35,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String CREATE_TABLE = "CREATE TABLE " + NAME_TABLE + " (id integer primary key autoincrement, path text, name text, date text, status text);";
+        String CREATE_TABLE = "CREATE TABLE " + NAME_TABLE + " (id integer primary key autoincrement, path text, name text, date text, status text, image text);";
         sqLiteDatabase.execSQL(CREATE_TABLE);
     }
 
@@ -52,6 +53,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_NAME,object.getNameFile());
         values.put(KEY_DATE,object.getDateFile());
         values.put(KEY_STATUS,object.getStatus());
+        values.put(KEY_ARRAY_IMAGE,object.getImage());
         db.insert(NAME_TABLE,null,values);
         Log.d("Database", "addImage: " +  db.getPath());
         db.close();
@@ -64,7 +66,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(cursor != null) {
             cursor.moveToFirst();
         }
-        FileObject object = new FileObject(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
+        FileObject object = new FileObject(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
         return object;
     }
     public List<FileObject> getListObject() {
@@ -74,7 +76,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query,null);
         if(cursor.moveToFirst()) {
             do {
-                FileObject object  = new FileObject(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+                FileObject object  = new FileObject(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5));
                 object.setId(cursor.getInt(0));
                 fileObjects.add(object);
             }

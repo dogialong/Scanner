@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -41,12 +42,14 @@ public class AddressActivity extends AppCompatActivity
     Location mLastLocation;
     Marker mCurrLocationMarker;
     Button btnBack ;
+    TextView tvMidle;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
-
+        tvMidle = (TextView) findViewById(R.id.tvHomeBar) ;
+        tvMidle.setText(R.string.location);
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
         btnBack = (Button) findViewById(R.id.icback);
