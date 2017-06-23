@@ -11,7 +11,8 @@
     <dimen name="height_toolbar">60dp</dimen>
     <dimen name="spacing_card_album_grid">3dp</dimen>
 
-
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="progress_text_size">15sp</dimen>
     <dimen name="scanPadding">16dp</dimen>
     <dimen name="polygonViewCircleWidth">32dp</dimen>
     <dimen name="polygonViewStrokeWidth">2dp</dimen>

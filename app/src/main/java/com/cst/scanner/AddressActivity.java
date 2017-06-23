@@ -41,7 +41,7 @@ public class AddressActivity extends AppCompatActivity
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-    Button btnBack ;
+    Button btnBack,btnBack1 ;
     TextView tvMidle;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,11 +49,14 @@ public class AddressActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
         tvMidle = (TextView) findViewById(R.id.tvHomeBar) ;
-        tvMidle.setText(R.string.location);
+        tvMidle.setText(R.string.diachi);
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
         btnBack = (Button) findViewById(R.id.icback);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        btnBack1 = (Button) findViewById(R.id.icback1);
+        btnBack.setVisibility(View.GONE);
+        btnBack1.setVisibility(View.VISIBLE);
+        btnBack1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();

@@ -1,4 +1,4 @@
-package com.cst.scanner.BaseUI;
+package com.cst.scanner;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,15 +14,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cst.scanner.BaseUI.BaseFragment;
 import com.cst.scanner.BaseUI.Helper.Singleton;
-import com.cst.scanner.MainActivity;
-import com.cst.scanner.R;
 
 /**
  * Created by longdg on 28/04/2017.
  */
 
-public class FLocationAndPurpose extends BaseFragment  {
+public class FLocationAndPurpose extends BaseFragment {
     TextView tvPurpose,tvLocation,tvEmail;
     @Nullable
     @Override
@@ -44,14 +43,14 @@ public class FLocationAndPurpose extends BaseFragment  {
         super.onResume();
         if(Singleton.getGetInstance().isLocation) {
             MainActivity.getInstance().getRelaNavTop().setBackgroundColor(getResources().getColor(R.color.colorBgAbout));
-            MainActivity.getInstance().getTitleBarTop().setText("Location");
+            MainActivity.getInstance().getTitleBarTop().setText(R.string.diachi);
 
             tvLocation.setVisibility(View.VISIBLE);
             tvPurpose.setVisibility(View.GONE);
             tvEmail.setVisibility(View.GONE);
         }else {
             MainActivity.getInstance().getRelaNavTop().setBackgroundColor(getResources().getColor(R.color.colorBgAbout));
-            MainActivity.getInstance().getTitleBarTop().setText("Purpose");
+            MainActivity.getInstance().getTitleBarTop().setText(R.string.muctieu);
             tvLocation.setVisibility(View.GONE);
             tvPurpose.setVisibility(View.VISIBLE);
             tvEmail.setVisibility(View.VISIBLE);
@@ -74,7 +73,7 @@ public class FLocationAndPurpose extends BaseFragment  {
             public void onClick(View view) {
                 MainActivity.getInstance().getSupportFragmentManager().popBackStack();
                 MainActivity.getInstance().getNavTop().setVisibility(View.VISIBLE);
-                MainActivity.getInstance().getTitleBarTop().setText("About us");
+                MainActivity.getInstance().getTitleBarTop().setText(R.string.btnInfo);
                 MainActivity.getInstance().getRelaNavTop().setBackgroundColor(getResources().getColor(R.color.colorNav1));
                 MainActivity.getInstance().getButtonBac1k().setVisibility(View.GONE);
                 MainActivity.getInstance().getButtonBack().setVisibility(View.VISIBLE);

@@ -18,10 +18,16 @@ public class Singleton {
         return instance;
     }
     public ArrayList<FileObject> arrayList = new ArrayList<>();
+    public ArrayList<FileObject> arrayListSlider = new ArrayList<>();
     public  boolean isLocation = false;
     public String linkUrlImage = "";
     public String key_json = "image_link_arr";
     public boolean isStorage = false;
     public int positionSeleted = -1;
     public String where = "";
+    public String password = "";
+    public String linkPdf = "";
+    public String linkImagePreview = "";
+    public FileObject fileObject ;
+
 }

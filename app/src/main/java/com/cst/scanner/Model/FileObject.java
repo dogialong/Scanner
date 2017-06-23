@@ -15,7 +15,14 @@ public class FileObject {
         this.status = status;
         this.image = image;
     }
-
+    public FileObject(int id,String pathFile,String nameFile  ,String dateFile ,String status,String image) {
+        this.pathFile = pathFile;
+        this.nameFile = nameFile;
+        this.dateFile = dateFile;
+        this.status = status;
+        this.image = image;
+        this.id = id;
+    }
     public String getImage() {
         return image;
     }

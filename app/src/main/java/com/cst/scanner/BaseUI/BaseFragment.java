@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,17 +42,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cst.scanner.BaseUI.Helper.ImageHelper;
+import com.cst.scanner.BaseUI.Helper.Singleton;
 import com.cst.scanner.R;
-import com.flyco.dialog.listener.OnBtnClickL;
-import com.flyco.dialog.listener.OnOperItemClickL;
-import com.flyco.dialog.widget.ActionSheetDialog;
-import com.flyco.dialog.widget.MaterialDialog;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -229,6 +233,15 @@ public class BaseFragment extends Fragment {
                                   String backStackTag, boolean isAddToStack, int containerViewId) {
         FragmentTransaction fTrans = fragmentManager1.beginTransaction();
         fTrans.replace(containerViewId, f, fragmentTag);
+        if (isAddToStack) {
+            fTrans.addToBackStack(backStackTag);
+        }
+        fTrans.commit();
+    }
+    protected void navToByAdd(android.support.v4.app.FragmentManager fragmentManager1, Fragment f, String fragmentTag,
+                                  String backStackTag, boolean isAddToStack, int containerViewId) {
+        FragmentTransaction fTrans = fragmentManager1.beginTransaction();
+        fTrans.add(containerViewId, f, fragmentTag);
         if (isAddToStack) {
             fTrans.addToBackStack(backStackTag);
         }
@@ -465,72 +478,8 @@ public class BaseFragment extends Fragment {
 //        dialog.show();
 //    }
 
-    public void showDialogNoTitle(String content) {
-        final MaterialDialog dialog = new MaterialDialog(getContext());
-        dialog.isTitleShow(false);
-        dialog.content(content)//
-                .btnNum(1)
-                .btnText("Ok")//
-                .show();
-        dialog.setTitle("Notice");
-        dialog.setOnBtnClickL(
-                new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-//                        onButtonClick.buttonCLick();
-                        dialog.cancel();
-                    }
-                });
-    }
-    public void showDialogNoTitleTwoChoice(String content, final OnBtnClickL onBtnClickL) {
-        final MaterialDialog dialog = new MaterialDialog(getContext());
-        dialog.isTitleShow(false);
-        dialog.content(content)//
-                .btnNum(2)
-                .btnText("Cancel","Ok")
-                .show();
-        dialog.setTitle("Notice");
-        dialog.setOnBtnClickL(
-                new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-//                        onButtonClick.buttonCLick();
-                        dialog.dismiss();
-                    }
-                },
-                new OnBtnClickL() {//right btn click listener
-                    @Override
-                    public void onBtnClick() {
-                        onBtnClickL.onBtnClick();
-                        dialog.dismiss();
-                    }
-                });
-    }
-    public void showDialog(View v, final OnBtnClickL onBtnClickL) {
-        final String[] stringItems = {"Cancel", "OK"};
-        final ActionSheetDialog dialog = new ActionSheetDialog(getContext(), stringItems, v);
-        dialog.isTitleShow(false).show();
-        dialog.cancelText("Cancel");
-        dialog.setOnOperItemClickL(new OnOperItemClickL() {
-            @Override
-            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        dialog.cancel();
-                        break;
-                    case 1:
 
-                        onBtnClickL.onBtnClick();
-                        break;
-                    default:
-                        break;
-                }
 
-//
-                dialog.dismiss();
-            }
-        });
-    }
     public void showDialog(int idView, final BaseFragment.IClick iclick, boolean isHasCancel) {
         final Dialog dialog = new Dialog(getContext());
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -737,6 +686,50 @@ public class BaseFragment extends Fragment {
         Log.d(TAG, "convertArrayToString: " + stringBuilder.toString());
         return stringBuilder.toString();
     }
+    // convert pdf
+    private static String USER_PASSWORD = "password";
+    private static String OWNER_PASSWORD = "secured";
+    public void encryptPdf(String src, String pass) throws IOException, DocumentException {
+        PdfReader reader = new PdfReader("file://" + android.os.Environment.getExternalStorageDirectory().toString() +"/" + src +".pdf");
+        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(android.os.Environment.getExternalStorageDirectory().toString() +"/" + src +".pdf"));
+        stamper.setEncryption(USER_PASSWORD.getBytes(), pass.getBytes(),
+                PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128 | PdfWriter.DO_NOT_ENCRYPT_METADATA);
+        stamper.close();
+        reader.close();
+    }
+
+    public void convertPdf(ArrayList<String> arrLink,String nameFile) {
+        Document document = new Document();
+        String dirpath = android.os.Environment.getExternalStorageDirectory().toString();
+        try {
+            PdfWriter.getInstance(document,new FileOutputStream(dirpath + "/" + nameFile + ".pdf") );
+            Singleton.getGetInstance().linkPdf = dirpath + "/" + nameFile + ".pdf";
+            document.open();
+            Image img = null;  // Change image's name and extension.
+            try {
+                for (int i = 0; i < arrLink.size(); i++) {
+                    img = Image.getInstance("file://"+arrLink.get(i));
+                    float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                            - document.rightMargin() - 0) / img.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
+                    img.scalePercent(scaler);
+                    img.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+                    document.add(img);
+                }
+                document.close();
+                Toast.makeText(getContext(), "Created", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "convertPdf: " + dirpath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void showCamera() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -789,32 +782,6 @@ public class BaseFragment extends Fragment {
 //
     }
 
-
-    public void ActionSheetDialogNoTitle(View v, String[] stringItems) {
-//        final String[] stringItems = {"Snap a photo", "Take Photo", "Choose From Library"};
-        final ActionSheetDialog dialog = new ActionSheetDialog(getContext(), stringItems, v);
-        dialog.isTitleShow(false).show();
-        dialog.cancelText("Cancel");
-        dialog.setOnOperItemClickL(new OnOperItemClickL() {
-            @Override
-            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        showCamera();
-                        break;
-                    case 1:
-
-                        showGallery();
-                        break;
-                    default:
-                        break;
-                }
-
-//
-                dialog.dismiss();
-            }
-        });
-    }
 
     //web
     public void goToUrl (String url) {

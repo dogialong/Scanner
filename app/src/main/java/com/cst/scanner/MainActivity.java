@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -13,9 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cst.scanner.BaseUI.BaseActivity;
-import com.cst.scanner.BaseUI.BaseFragment;
 import com.cst.scanner.BaseUI.Helper.Constant;
 import com.cst.scanner.Database.DatabaseHandler;
+import com.kennyc.bottomsheet.BottomSheet;
+import com.kennyc.bottomsheet.BottomSheetListener;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
@@ -23,16 +26,17 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener, BottomSheetListener {
     private static final int REQUEST_CODE = 99;
-    LinearLayout llAboutUs,llFiles,llNew,llHelp,llNav;
+    LinearLayout llAboutUs, llFiles, llNew, llHelp, llNav;
     RelativeLayout rlNav;
     TextView tvHomeBar;
-    public Button btnHomeBar,btnBack;
+    public Button btnHomeBar, btnBack;
     public static MainActivity mainActivity;
-    DatabaseHandler db ;
+    DatabaseHandler db;
     String fileOfImage;
     public static android.support.v4.app.FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,21 +70,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         btnHomeBar.setOnClickListener(this);
         btnBack = (Button) findViewById(R.id.icback1);
     }
+
     public TextView getTitleBarTop() {
         return tvHomeBar;
     }
+
     public Button getButtonBack() {
         return btnHomeBar;
     }
+
     public Button getButtonBac1k() {
         return btnBack;
     }
+
     public LinearLayout getNavTop() {
         return llNav;
     }
+
     public RelativeLayout getRelaNavTop() {
         return rlNav;
     }
+
     public static MainActivity getInstance() {
         return mainActivity;
     }
@@ -97,42 +107,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             case R.id.llFiles:
                 resetBackgroundCircle();
                 llFiles.setBackgroundResource(R.drawable.circle_red);
-                navToByReplace(fragmentManager,new FStorage(),"FStorage","FStorage",true,R.id.main_contain);
+                navToByReplace(fragmentManager, new FStorage(), "FStorage", "FStorage", true, R.id.main_contain);
                 break;
             case R.id.llAboutus:
                 resetBackgroundCircle();
                 llAboutUs.setBackgroundResource(R.drawable.circle_red);
-                navToByReplace(fragmentManager,new FAboutUs(),"FAboutUs","FAboutUs",true,R.id.main_contain);
+                navToByReplace(fragmentManager, new FAboutUs(), "FAboutUs", "FAboutUs", true, R.id.main_contain);
                 break;
             case R.id.llNew:
                 llNew.setBackgroundResource(R.drawable.circle_red);
-                showDialogToTakePicture(R.layout.dialog_select_image, new BaseFragment.IClick() {
-                    @Override
-                    public void click() {
-                        Intent i = new Intent(MainActivity.this,AutoScanActivity.class);
-                        startActivity(i);
-                    }
-
-                    @Override
-                    public void click2() {
-                        startScan(Constant.OPEN_MEDIA);
-                    }
-                },"");
-
+                new BottomSheet.Builder(this)
+                        .setSheet(R.menu.list_sheet)
+                        .setListener(this)
+                        .show();
                 break;
             case R.id.llHelp:
                 resetBackgroundCircle();
+                navToByReplace(fragmentManager, new FragmentHelp(), "FragmentHelp", "FragmentHelp", true, R.id.wrapper);
                 llHelp.setBackgroundResource(R.drawable.circle_red);
                 break;
             case R.id.icback:
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 
     @Override
     public void onBackPressed() {
-
+        super.onBackPressed();
+        if (tvHomeBar.getText().toString().equals(getString(R.string.btnFolder))) {
+            getRelaNavTop().setVisibility(View.VISIBLE);
+            getButtonBack().setVisibility(View.VISIBLE);
+        } else if (tvHomeBar.getText().toString().equals(getString(R.string.btnInfo))) {
+            getRelaNavTop().setVisibility(View.VISIBLE);
+            getButtonBack().setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -155,6 +165,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, preference);
         startActivityForResult(intent, REQUEST_CODE);
     }
+
     public void resetBackgroundCircle() {
         llAboutUs.setBackgroundResource(R.drawable.circle_none);
         llNew.setBackgroundResource(R.drawable.circle_none);
@@ -162,4 +173,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         llFiles.setBackgroundResource(R.drawable.circle_none);
     }
 
+    @Override
+    public void onSheetShown(@NonNull BottomSheet bottomSheet) {
+
+    }
+
+    @Override
+    public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.camera:
+                Intent i = new Intent(MainActivity.this, AutoScanActivity.class);
+                startActivity(i);
+                break;
+            case R.id.library:
+                startScan(Constant.OPEN_MEDIA);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onSheetDismissed(@NonNull BottomSheet bottomSheet, @DismissEvent int dismissEvent) {
+
+    }
 }

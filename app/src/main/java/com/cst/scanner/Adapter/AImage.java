@@ -17,11 +17,11 @@ import java.util.ArrayList;
  * Created by longdg on 11/05/2017.
  */
 
-public class ImageAdapter extends BaseAdapter {
+public class AImage extends BaseAdapter {
     ArrayList<String> objs;
     Context context;
     IListViewClick iListViewClick;
-    public ImageAdapter(Context context, ArrayList<String> objs,IListViewClick iListViewClick) {
+    public AImage(Context context, ArrayList<String> objs, IListViewClick iListViewClick) {
         this.objs = objs;
         this.context = context;
         this.iListViewClick = iListViewClick;

@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.cst.scanner.BaseUI.BaseFragment;
-import com.cst.scanner.BaseUI.FLocationAndPurpose;
 import com.cst.scanner.BaseUI.Helper.Singleton;
 
 
@@ -73,7 +72,7 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_fabout_us,container,false);
+        View view = inflater.inflate(R.layout.f_fabout_us,container,false);
         return view;
     }
 
@@ -189,8 +188,8 @@ public class FAboutUs extends BaseFragment implements View.OnClickListener{
                 llHelps.setBackgroundColor(getResources().getColor(R.color.colorRed));
 
                 MainActivity.getInstance().getButtonBack().setVisibility(View.GONE);
-                navToByReplace(MainActivity.getInstance().getSupportFragmentManager(),new FragmentHelps(),
-                        "FragmentHelps","FragmentHelps",true,R.id.rlFabout,1);
+                navToByReplace(MainActivity.getInstance().getSupportFragmentManager(),new FragmentHelp(),
+                        "FragmentHelps","FragmentHelps",true,R.id.wrapper,1);
                 break;
             default:break;
         }

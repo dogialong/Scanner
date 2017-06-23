@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Scanner.iml" filepath="$PROJECT_DIR$/Scanner.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/circleprogressbar/circleprogressbar.iml" filepath="$PROJECT_DIR$/circleprogressbar/circleprogressbar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/openCVLibrary300/openCVLibrary300.iml" filepath="$PROJECT_DIR$/openCVLibrary300/openCVLibrary300.iml" />
       <module fileurl="file://$PROJECT_DIR$/scanlibrary/scanlibrary.iml" filepath="$PROJECT_DIR$/scanlibrary/scanlibrary.iml" />
     </modules>

@@ -1,31 +1,33 @@
 package com.cst.scanner;
 
+import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cst.scanner.Adapter.ImageAdapter;
+import com.cst.scanner.Adapter.AImage2;
 import com.cst.scanner.BaseUI.BaseActivity;
 import com.cst.scanner.BaseUI.Helper.Singleton;
 import com.cst.scanner.Custom.TakePictureView;
 import com.cst.scanner.Database.DatabaseHandler;
 import com.cst.scanner.Delegate.IListViewClick;
 import com.cst.scanner.Model.FileObject;
+import com.dinuscxj.progressbar.CircleProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,12 +64,13 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
     /**
      * class name for debugging with logcat
      */
+    private CircleProgressBar mCustomProgressBar4;
     private static final String TAG = MainActivity.class.getName();
     /**
      * the camera view
      */
     private TakePictureView mOpenCvCameraView;
-
+    private String [] strings = {"3","2","Scan"};
     private static final Scalar RGB_RED = new Scalar(255, 0, 0);
 
     /**
@@ -105,23 +108,26 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
      */
     private MatOfPoint2f approxCurve;
     private TextView tvScan;
-    private ListView lvImage;
+    private RecyclerView lvImage;
     private LinearLayout llX,llFlash,llAuto,llV,llTakePicture;
     public boolean isDetect = false;
     public Mat mInter;
     public String filename;
-    private ImageAdapter adapterImage;
+    private AImage2 adapterImage;
     private ArrayList<FileObject> arrstamp;
     public Handler handler;
+    public Handler handlerTime;
     public DatabaseHandler db;
     String fileOfImage;
     ImageView imgFlash,imgAuto;
     private boolean isFlashOn;
     private boolean hasFlash;
+    int dem = 0;
     Camera.Parameters params;
     public static AutoScanActivity autoScanActivity;
     private boolean isAutoScan = true;
     private ArrayList<String> arrLinkPath ;
+    private CountDownTimer countDownTimer;
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -187,6 +193,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
             alert.show();
             return;
         }
+        mCustomProgressBar4 = (CircleProgressBar) findViewById(R.id.custom_progress4);
         imgFlash = (ImageView) findViewById(R.id.imgFlash);
         imgAuto = (ImageView) findViewById(R.id.imgAuto);
         tvScan = (TextView) findViewById(R.id.tvScan);
@@ -212,8 +219,8 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                         handler.removeCallbacksAndMessages(null);
                     }
                     Singleton.getGetInstance().where = "ScanActivity";
-                    Intent i = new Intent(AutoScanActivity.this,ActivitySlider.class);
-                    startActivity(i);
+                    navToByReplace(getSupportFragmentManager(), new ActivitySlider(), "ActivitySlider", "ActivitySlider", true, R.id.rlScan);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -226,7 +233,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                 mOpenCvCameraView.setupCameraFlashLight();
                 mOpenCvCameraView.isFlashLightON = !mOpenCvCameraView.isFlashLightON;
                 if(mOpenCvCameraView.isFlashLightON ) {
-                    imgFlash.setImageResource(R.drawable.flash_off);
+                    imgFlash.setImageResource(R.drawable.turn_off);
                 } else {
                     imgFlash.setImageResource(R.drawable.flash_on);
                 }
@@ -243,7 +250,6 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                 Singleton.getGetInstance().arrayList.add(new FileObject(filename,
                         fileOfImage,"","",""));
                 adapterImage.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "Taking", Toast.LENGTH_SHORT).show();
             }
         });
         llAuto.setOnClickListener(new View.OnClickListener() {
@@ -251,13 +257,13 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
             public void onClick(View view) {
                 isAutoScan = !isAutoScan;
                 if(isAutoScan) {
-                    imgAuto.setImageResource(R.drawable.ic_auto_on);
+                    imgAuto.setImageResource(R.drawable.auto);
 
                 } else {
                     if(handler != null) {
                         handler.removeCallbacksAndMessages(null);
                     }
-                    imgAuto.setImageResource(R.drawable.ic_auto);
+                    imgAuto.setImageResource(R.drawable.auto_off);
                 }
             }
         });
@@ -279,10 +285,10 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         mi = new ActivityManager.MemoryInfo();
         activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 
-        lvImage = (ListView) findViewById(R.id.lv);
+        lvImage = (RecyclerView) findViewById(R.id.lv);
         arrstamp = new ArrayList<>();
 
-        adapterImage = new ImageAdapter(getApplicationContext(), arrLinkPath, new IListViewClick() {
+        adapterImage = new AImage2(getApplicationContext(), arrLinkPath, new IListViewClick() {
             @Override
             public void onClick(View v, int position) {
                 if (handler != null) {
@@ -290,13 +296,14 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                 }
                 Singleton.getGetInstance().isStorage = false;
                 Singleton.getGetInstance().where ="adapterImage";
-                Intent i = new Intent(AutoScanActivity.this,ActivitySlider.class);
-                startActivity(i);
+                navToByReplace(getSupportFragmentManager(), new ActivitySlider(), "ActivitySlider", "ActivitySlider", true, R.id.rlScan);
 
             }
         });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        lvImage.setLayoutManager(linearLayoutManager);
         lvImage.setAdapter(adapterImage);
-
     }
 
 
@@ -487,7 +494,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
     Rect bounding_rect;
 
     void findLargesSquares(final List<MatOfPoint> squares, Mat image) {
-
+        Mat imageclone = image.clone();
         largest_area = 0;
         largest_contour_index = 0;
         largest_contour_index = -1;
@@ -503,11 +510,28 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                 bounding_rect = Imgproc.boundingRect(squares.get(i)); // Find the bounding rectangle for biggest contour
             }
         }
-        Imgproc.drawContours(image, squares, largest_contour_index, new Scalar(0, 0, 255),2);
+        Imgproc.drawContours(image, squares, largest_contour_index, new Scalar(0, 0, 255),1);
+
+
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    handlerTime = new Handler();
+//                    handlerTime.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (dem < 3) {
+//                                startTimer(strings[dem]);
+//                                dem++;
+//                            }
+//                        }
+//                    },1000);
+//                }
+//            });
         if (largest_contour_index != -1 ) {
            try {
                Rect rect = Imgproc.boundingRect(squares.get(largest_contour_index));
-               mInter= image.submat(rect);
+               mInter= imageclone.submat(rect);
                filename = setFileName();
                if (handler != null ) {
                    return;
@@ -529,7 +553,6 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                                    Singleton.getGetInstance().arrayList.add(new FileObject(filename,
                                            fileOfImage,"","",""));
                                    mInter.release();
-                                   Toast.makeText(getApplicationContext(), "Taking", Toast.LENGTH_SHORT).show();
                                    if(handler !=null) {
                                        handler.removeCallbacksAndMessages(null);
                                    }
@@ -541,9 +564,27 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                }
            } catch (IndexOutOfBoundsException e) {e.printStackTrace();}
         } else {
+            dem = 0;
            if(handler !=null) {
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       mCustomProgressBar4.setVisibility(View.GONE);
+                   }
+               });
                handler.removeCallbacksAndMessages(null);
                handler = null;
+           }
+           if (handlerTime !=null) {
+               handlerTime.removeCallbacksAndMessages(null);
+               handlerTime = null;
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       mCustomProgressBar4.setVisibility(View.GONE);
+                   }
+               });
+
            }
         }
     }
@@ -570,6 +611,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
     }
     public String setFileName() {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+//        File path =Environment.getExternalStorageDirectory();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateandTime = sdf.format(new Date());
         String filename = "Doc " + currentDateandTime + ".jpg";
@@ -578,6 +620,26 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         return filename;
     }
 
+    private void startTimer(String s) {
+        mCustomProgressBar4.setVisibility(View.VISIBLE);
+        simulateProgress(s);
+
+    }
+
+    private void simulateProgress(final String text) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, 3000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int progress = (int) animation.getAnimatedValue();
+                mCustomProgressBar4.setProgress(progress);
+                mCustomProgressBar4.setProgressTextFormatPattern(text);
+            }
+        });
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setDuration(3000);
+        animator.start();
+    }
     public static AutoScanActivity getInstance() {
         return autoScanActivity;
     }
@@ -587,6 +649,15 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         super.onBackPressed();
         if(Singleton.getGetInstance().arrayList !=null) {
             Singleton.getGetInstance().arrayList.clear();
+        }
+        if(Singleton.getGetInstance().where.equals("ScanActivity")) {
+            Singleton.getGetInstance().arrayList.clear();
+            getSupportFragmentManager().popBackStack();
+        } else if (Singleton.getGetInstance().where.equals("Document")) {
+            Singleton.getGetInstance().arrayList.clear();
+            getSupportFragmentManager().popBackStack();
+        } else if (Singleton.getGetInstance().where.equals("adapterImage")) {
+            getSupportFragmentManager().popBackStack();
         }
     }
 }

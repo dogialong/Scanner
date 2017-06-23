@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white_color"
+    android:gravity="center"
+    xmlns:foo="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+   >
+    <TextView
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:id="@+id/tvRequestName"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="18sp"
+        android:textColor="@color/black_color"
+        android:text="@string/share"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:id="@+id/edNameDoc"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="@string/change_name_doc"
+            android:textSize="18sp"
+            android:textColor="@color/color_pending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:text=".pdf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:text="Tai lieu co 3 trang"
+        android:textColor="@color/black"
+        android:layout_gravity="right"
+        android:gravity="left"
+        android:textSize="14sp"
+        android:padding="5dp"
+        android:id="@+id/tvNumberPage"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imgkey"
+            android:background="@drawable/key"
+            android:layout_width="15dp"
+            android:layout_height="15dp" />
+        <EditText
+
+            android:hint="@string/type_pass"
+
+            android:id="@+id/key"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:padding="5dp"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="20dp"
+            android:layout_width="150dp"
+            android:layout_height="25dp" />
+    </LinearLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/color_pending"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+   <LinearLayout
+       android:weightSum="2"
+       android:layout_width="match_parent"
+       android:layout_height="40dp">
+       <Button
+           android:background="?android:attr/selectableItemBackground"
+           android:layout_gravity="center"
+           android:gravity="center"
+           android:textAllCaps="false"
+           android:text="@string/cancel"
+           android:id="@+id/btnCancel"
+           android:layout_weight="1"
+           android:layout_width="0dp"
+           android:layout_height="40dp" />
+
+       <Button
+           android:background="?android:attr/selectableItemBackground"
+           android:layout_gravity="center"
+           android:gravity="center"
+           android:textAllCaps="false"
+           android:text="Ok"
+           android:id="@+id/btnOk"
+           android:layout_weight="1"
+           android:layout_width="0dp"
+           android:layout_height="40dp" />
+   </LinearLayout>
+    <View
+        android:background="@color/color_pending"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>

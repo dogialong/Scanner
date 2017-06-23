@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cst.scanner.BaseUI.Helper.Singleton;
@@ -24,12 +25,12 @@ import java.util.List;
  * Created by longdg on 17/04/2017.
  */
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
+public class AMain extends RecyclerView.Adapter<AMain.MyViewHolder> {
     public List<FileObject> arr;
     public boolean isGrid;
     IListViewClick iListViewClick;
     Context context;
-    public MainAdapter(Context mContext,List<FileObject> arr, IListViewClick iListViewClick) {
+    public AMain(Context mContext, List<FileObject> arr, IListViewClick iListViewClick) {
         this.arr = arr;
         this.iListViewClick = iListViewClick;
         this.context = mContext;
@@ -94,6 +95,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
                 iListViewClick.onClick(view,position);
             }
         });
+        if (obj.getStatus().equals("yes")) {
+            holder.border.setBackgroundResource(R.color.colorTvGreen);
+            Picasso.with(context).load(R.drawable.lock1).fit().centerCrop().rotate(-90).into(holder.icon);
+
+        } else {
+            Picasso.with(context).load("file://" + linkPath).fit().centerCrop().into(holder.icon);
+            holder.border.setBackgroundResource(R.color.colorTvRed);
+        }
     }
 
     @Override
@@ -107,15 +116,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     }
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView icon,delete,share;
+        public ImageView icon;
+        public LinearLayout delete,share,border;
         public TextView title,tvTime;
         public MyViewHolder(View itemView) {
             super(itemView);
             icon = (ImageView) itemView.findViewById(R.id.ivIcon);
             title = (TextView) itemView.findViewById(R.id.tvTitle);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
-            delete = (ImageView) itemView.findViewById(R.id.share);
-            share = (ImageView) itemView.findViewById(R.id.delete);
+            delete = (LinearLayout) itemView.findViewById(R.id.share);
+            share = (LinearLayout) itemView.findViewById(R.id.delete);
+            border = (LinearLayout) itemView.findViewById(R.id.llBorder);
         }
     }
 }

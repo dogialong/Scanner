@@ -8,18 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.front"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.front.autofocus"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera.front"/>
+    <uses-feature android:name="android.hardware.camera.front.autofocus"/>
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -37,7 +29,7 @@
         <activity
             android:name=".AutoScanActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
@@ -72,11 +64,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize" />
-        <activity android:name=".ActivitySlider"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|adjustResize"
-            ></activity>
+
     </application>
 
 </manifest>

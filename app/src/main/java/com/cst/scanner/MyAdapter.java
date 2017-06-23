@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.cst.scanner.BaseUI.Helper.Singleton;
+import com.cst.scanner.Delegate.IListViewClick;
 import com.cst.scanner.Model.FileObject;
 import com.squareup.picasso.Picasso;
 
@@ -23,11 +24,13 @@ public class MyAdapter extends PagerAdapter {
     private LayoutInflater inflater;
     private Context context;
     private ArrayList<String> arrLinkPath;
-    public MyAdapter(Context context, ArrayList<FileObject> images, ArrayList<String> arrLinkPath) {
+    private IListViewClick iListViewClick;
+    public MyAdapter(Context context, ArrayList<FileObject> images, ArrayList<String> arrLinkPath, IListViewClick iListViewClick) {
         this.context = context;
         this.images=images;
         this.arrLinkPath = arrLinkPath;
         inflater = LayoutInflater.from(context);
+        this.iListViewClick = iListViewClick;
     }
 
     @Override
@@ -41,13 +44,19 @@ public class MyAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup view, int position) {
+    public Object instantiateItem(ViewGroup view, final int position) {
         View myImageLayout = inflater.inflate(R.layout.slide, view, false);
 
 
 
             ImageView myImage = (ImageView) myImageLayout
                     .findViewById(R.id.image);
+        myImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iListViewClick.onClick(view,position);
+            }
+        });
             if(Singleton.getGetInstance().isStorage) {
                 String obj = arrLinkPath.get(position);
                 Picasso.with(context).load("file://" + obj).fit().centerCrop().into(myImage);

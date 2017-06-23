@@ -1,7 +1,6 @@
 package com.cst.scanner.BaseUI;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -38,7 +37,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -48,11 +46,15 @@ import android.widget.Toast;
 import com.cst.scanner.BaseUI.Helper.Constant;
 import com.cst.scanner.BaseUI.Helper.ImageHelper;
 import com.cst.scanner.R;
-import com.flyco.dialog.listener.OnOperItemClickL;
-import com.flyco.dialog.widget.ActionSheetDialog;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +129,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void permissionsRequired() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if ( checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
@@ -141,7 +143,7 @@ public class BaseActivity extends AppCompatActivity {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     Toast.makeText(this, "Please accept permission for Photo feauture.", Toast.LENGTH_SHORT).show();
                 }
-                requestPermissions(new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST);
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST);
             }
         } else {
 
@@ -150,11 +152,13 @@ public class BaseActivity extends AppCompatActivity {
 
     ConnectivityManager connManager;
     NetworkInfo mWifi;
-    public boolean checkWifi () {
+
+    public boolean checkWifi() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null;
     }
+
     public boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -279,6 +283,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
     public void showGalleryVideo() {
         if (Build.VERSION.SDK_INT >= 23) {
             //this code will be executed on devices running ICS or later
@@ -299,7 +304,8 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
-    public void requirePermissionStorage () {
+
+    public void requirePermissionStorage() {
         if (Build.VERSION.SDK_INT >= 23) {
             //this code will be executed on devices running ICS or later
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
@@ -318,6 +324,7 @@ public class BaseActivity extends AppCompatActivity {
 
         }
     }
+
     public void showCameraPreview() {
         if (Build.VERSION.SDK_INT >= 19) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -345,6 +352,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 //
     }
+
     public void showDialogToTakePicture(int idView, final BaseFragment.IClick iclick, String nameTitle) {
         final Dialog dialog = new Dialog(this);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -373,6 +381,7 @@ public class BaseActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
     public void showDialog(int idView, final IClick iclick, boolean isHasCancel) {
         final Dialog dialog = new Dialog(this);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -397,8 +406,10 @@ public class BaseActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
     public interface IClick {
         void click();
+
         void click2();
     }
 
@@ -420,13 +431,13 @@ public class BaseActivity extends AppCompatActivity {
         }
         fTraf.commit();
     }
+
     public static void navToByReplace(android.support.v4.app.FragmentManager fragmentManager, Fragment f, String fragmentTag,
                                       String backStackTag, boolean isAddToStack, int containerViewId, int i) {
         FragmentTransaction fTrans = fragmentManager.beginTransaction();
-        if (i==1){
+        if (i == 1) {
             fTrans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_right, R.anim.exit_to_left);
-        }
-        else {
+        } else {
             fTrans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_left, R.anim.exit_to_right);
         }
         fTrans.replace(containerViewId, f, fragmentTag);
@@ -484,7 +495,7 @@ public class BaseActivity extends AppCompatActivity {
         return isRight;
     }
 
-    private void goToUrl (String url) {
+    private void goToUrl(String url) {
         Uri uriUrl = Uri.parse(url);
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
         startActivity(launchBrowser);
@@ -523,15 +534,16 @@ public class BaseActivity extends AppCompatActivity {
 //        }
 //        return arrObj;
 //    }
-    public Bitmap decodeBitmap (int icon_resource) {
+    public Bitmap decodeBitmap(int icon_resource) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inSampleSize = 2;
         Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                icon_resource,opts);
+                icon_resource, opts);
         return icon;
     }
+
     public static String bitMapToString(Bitmap bitmap) {
-        if(bitmap != null) {
+        if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
@@ -542,24 +554,27 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
     //    public Bitmap decodeBitmap (String file) {
 //        BitmapFactory.Options opts = new BitmapFactory.Options();
 //        opts.inSampleSize = 16;
 //        Bitmap icon = BitmapFactory.decodeFile(file,opts);
 //        return icon;
 //    }
-    public Bitmap decodeBitmapFromPath (String file) {
+    public Bitmap decodeBitmapFromPath(String file) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         Bitmap icon = BitmapFactory.decodeFile(file);
-        icon = Bitmap.createScaledBitmap(icon,100,70, false);
+        icon = Bitmap.createScaledBitmap(icon, 100, 70, false);
         return icon;
     }
-    public Bitmap decodeBitmapFromPathCamera (String file) {
+
+    public Bitmap decodeBitmapFromPathCamera(String file) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         Bitmap icon = BitmapFactory.decodeFile(file);
-        icon = Bitmap.createScaledBitmap(icon,100,70, false);
+        icon = Bitmap.createScaledBitmap(icon, 100, 70, false);
         return icon;
     }
+
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                          int reqWidth, int reqHeight) {
 
@@ -575,6 +590,35 @@ public class BaseActivity extends AppCompatActivity {
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
     }
+
+    // convert pdf
+    public void convertPdf(String fileName) {
+        Document document = new Document();
+        String dirpath = android.os.Environment.getExternalStorageDirectory().toString();
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(dirpath + "/example.pdf")); //  Change pdf's name.
+            document.open();
+            Image img = null;  // Change image's name and extension.
+            try {
+                img = Image.getInstance(fileName);
+                float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                        - document.rightMargin() - 0) / img.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
+                img.scalePercent(scaler);
+                img.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+                document.add(img);
+                document.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
@@ -655,35 +699,10 @@ public class BaseActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
         }
     }
-    public void getVideoFromGallery () {
+
+    public void getVideoFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
-    }
-
-    public void ActionSheetDialogNoTitle(View v, final Activity activity, String[] stringItems) {
-//        final String[] stringItems = {"Snap a photo", "Take Photo", "Choose From Library"};
-        final ActionSheetDialog dialog = new ActionSheetDialog(this, stringItems, v);
-        dialog.isTitleShow(false).show();
-        dialog.cancelText("Cancel");
-        dialog.setOnOperItemClickL(new OnOperItemClickL() {
-            @Override
-            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        showCamera();
-                        break;
-                    case 1:
-
-                        showGallery();
-                        break;
-                    default:
-                        break;
-                }
-
-//
-                dialog.dismiss();
-            }
-        });
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
     }
 
     public void setImageSelectedFromGallery(Intent data, ImageView imageView) {
@@ -723,11 +742,12 @@ public class BaseActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
     /**
      * Shows the soft keyboard
      */
     public void showSoftKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         view.requestFocus();
         inputMethodManager.showSoftInput(view, 0);
     }
@@ -741,6 +761,7 @@ public class BaseActivity extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
     public String getPathImageFromGallery(Intent data) {
 
         String selectedImagePath = "";
@@ -826,28 +847,36 @@ public class BaseActivity extends AppCompatActivity {
         height = mainImage.getHeight();
         finalImage = Bitmap.createBitmap(width, height, mainImage.getConfig());
         Canvas canvas = new Canvas(finalImage);
-        canvas.drawBitmap(mainImage, 0,0,null);
-        canvas.drawBitmap(logoImage, 0 ,canvas.getHeight()-logoImage.getHeight() ,null);
+        canvas.drawBitmap(mainImage, 0, 0, null);
+        canvas.drawBitmap(logoImage, 0, canvas.getHeight() - logoImage.getHeight(), null);
 
         return finalImage;
     }
-    public static Matrix rotateImage (Uri uri) {
+
+    public static Matrix rotateImage(Uri uri) {
         Matrix matrix = new Matrix();
         try {
             ExifInterface exif = new ExifInterface(uri.getPath());
             int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             int rotationInDegrees = exifToDegrees(rotation);
 
-            if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
+            if (rotation != 0f) {
+                matrix.preRotate(rotationInDegrees);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return matrix;
     }
+
     private static int exifToDegrees(int exifOrientation) {
-        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
         return 0;
     }
 }

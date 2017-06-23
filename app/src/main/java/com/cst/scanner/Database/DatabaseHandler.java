@@ -88,11 +88,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public int updateObject (FileObject object) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(KEY_ID,object.getId());
         values.put(KEY_NAME,object.getNameFile());
         values.put(KEY_PATH,object.getPathFile());
         values.put(KEY_DATE,object.getDateFile());
         values.put(KEY_STATUS,object.getStatus());
-        return db.update(NAME_TABLE,values,KEY_NAME + "=?" , new String[] {object.getNameFile()});
+        return db.update(NAME_TABLE,values,KEY_ID + "=?" , new String[] {String.valueOf(object.getId())});
 
     }
 

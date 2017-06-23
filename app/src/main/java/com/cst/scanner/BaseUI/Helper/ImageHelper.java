@@ -40,7 +40,7 @@ public class ImageHelper {
         String filePath = "";
         String nameImageInSdcard = DateFormat.format("MM-dd-yy hh-mm-ss", new Date().getTime()).toString() + ".jpg";
         // save to sdcard
-        File sdCardDirectory = Environment.getExternalStorageDirectory();
+        File sdCardDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = new File(sdCardDirectory.toString(), nameImageInSdcard);
         // Encode the file as a PNG image.
         FileOutputStream outStream;

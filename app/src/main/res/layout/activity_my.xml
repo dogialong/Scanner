@@ -1,25 +1,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:opencv="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <RelativeLayout
         android:id="@+id/rlScan"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/lv"
-            android:background="@color/blue"
-            android:layout_width="100dp"
-            android:layout_height="match_parent" />
+            android:background="@color/gray_darkest"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
         <com.cst.scanner.Custom.TakePictureView
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="80dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="60dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/java_camera_view"
             opencv:camera_id="any" />
-
+        <com.dinuscxj.progressbar.CircleProgressBar
+            android:rotation="270"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/custom_progress4"
+            android:layout_marginTop="@dimen/default_margin"
+            app:style="solid_line"
+            app:progress_stroke_width="4dp"
+            app:line_width="4dp"
+            app:line_count="30"
+            app:progress_stroke_cap="round"
+            app:progress_shader="sweep"
+            app:progress_background_color="@color/holo_darker_gray"
+            app:progress_start_color="@color/holo_purple"
+            app:progress_end_color="@android:color/transparent"
+            app:progress_text_color="@color/holo_purple"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
         <TextView
             android:id="@+id/tvScan"
             android:visibility="gone"
@@ -30,22 +48,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <LinearLayout
-            android:visibility="visible"
-            android:background="@color/colorWhite"
-            android:orientation="vertical"
-            android:layout_alignParentRight="true"
             android:weightSum="5"
-            android:layout_width="80dp"
-            android:layout_height="match_parent">
+            android:visibility="visible"
+            android:background="@color/gray_darkest"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
             <LinearLayout
-                android:id="@+id/llV"
+                android:id="@+id/llX"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="match_parent">
                 <ImageView
-                    android:rotation="279"
-                    android:background="@drawable/ic_done_indigo_a200"
+                    android:background="@drawable/x"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llFlash"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/imgFlash"
+                    android:background="@drawable/turn_off"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llTakepictue"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+                <ImageView
+                    android:background="@drawable/takepic"
                     android:layout_width="35dp"
                     android:layout_height="35dp" />
             </LinearLayout>
@@ -55,52 +96,24 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="match_parent">
                 <ImageView
                     android:id="@+id/imgAuto"
-                    android:rotation="90"
-                    android:background="@drawable/ic_auto_on"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/llTakepictue"
-                android:gravity="center"
-                android:background="@drawable/ic_gps"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp" >
-                <ImageView
-                    android:background="@drawable/takepictue"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/llFlash"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
-                <ImageView
-                    android:id="@+id/imgFlash"
-                    android:rotation="279"
-                    android:background="@drawable/flash_off"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/llX"
-                android:gravity="center"
-                android:background="@drawable/ic_gps"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
-                <ImageView
-                    android:background="@drawable/x"
+                    android:background="@drawable/auto"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
             </LinearLayout>
-
+            <LinearLayout
+                android:id="@+id/llV"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:background="@drawable/v"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp" />
+            </LinearLayout>
 
         </LinearLayout>
     </RelativeLayout>
