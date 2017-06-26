@@ -1,5 +1,7 @@
 package com.cst.scanner;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
@@ -34,6 +36,8 @@ public class FragmentPreview extends BaseFragment implements View.OnClickListene
     int countR, countL;
     EditText edComment;
     Bitmap bitmapRotate = null;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +48,9 @@ public class FragmentPreview extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        preferences = getActivity().getSharedPreferences(Singleton.getGetInstance().KEY_SHAREPREFERENCE, Context.MODE_PRIVATE);
+        editor = preferences.edit();
         img = (ImageView) view.findViewById(R.id.img);
         llTurnL = (LinearLayout) view.findViewById(R.id.llTurnL);
         llTurnR = (LinearLayout) view.findViewById(R.id.llTurnR);
@@ -65,21 +72,18 @@ public class FragmentPreview extends BaseFragment implements View.OnClickListene
             case R.id.llTurnL:
                 switch (countL) {
                     case 0:
-                        img.setRotation(-90);
                         Picasso.with(getContext()).load("file://"+Singleton.getGetInstance().linkImagePreview)
                                 .rotate(-90).fit().centerInside().into(img);
                         bitmapRotate = getBitmapFromImageViewDrawCanvas(img);
                         countL++;
                         break;
                     case 1:
-                        img.setRotation(-180);
                         Picasso.with(getContext()).load("file://"+Singleton.getGetInstance().linkImagePreview)
                                 .rotate(-180).fit().centerInside().into(img);
                         bitmapRotate = getBitmapFromImageViewDrawCanvas(img);
                         countL++;
                         break;
                     case 2:
-                        img.setRotation(-270);
                         Picasso.with(getContext()).load("file://"+Singleton.getGetInstance().linkImagePreview)
                                 .rotate(-270).fit().centerInside().into(img);
                         bitmapRotate = getBitmapFromImageViewDrawCanvas(img);
@@ -98,28 +102,24 @@ public class FragmentPreview extends BaseFragment implements View.OnClickListene
             case R.id.llTurnR:
                 switch (countR) {
                     case 0:
-                        img.setRotation(90);
                         Picasso.with(getContext()).load("file://"+Singleton.getGetInstance().linkImagePreview)
                                 .rotate(90).fit().centerInside().into(img);
                         bitmapRotate = getBitmapFromImageViewDrawCanvas(img);
                         countR++;
                         break;
                     case 1:
-                        img.setRotation(180);
                         Picasso.with(getContext()).load("file://"+Singleton.getGetInstance().linkImagePreview)
                                 .rotate(180).fit().centerInside().into(img);
                         bitmapRotate = getBitmapFromImageViewDrawCanvas(img);
                         countR++;
                         break;
                     case 2:
-                        img.setRotation(270);
                         Picasso.with(getContext()).load("file://"+Singleton.getGetInstance().linkImagePreview)
                                 .rotate(270).fit().centerInside().into(img);
                         bitmapRotate = getBitmapFromImageViewDrawCanvas(img);
                         countR++;
                         break;
                     case 3:
-                        countR=0;
                         Picasso.with(getContext()).load("file://"+Singleton.getGetInstance().linkImagePreview)
                                 .rotate(360).fit().centerInside().into(img);
                         bitmapRotate = getBitmapFromImageViewDrawCanvas(img);
@@ -140,6 +140,8 @@ public class FragmentPreview extends BaseFragment implements View.OnClickListene
                 if (bitmapRotate != null) {
                     saveImage(bitmapRotate,Singleton.getGetInstance().linkImagePreview);
                 }
+                editor.putString(Singleton.getGetInstance().linkImagePreview,edComment.getText().toString());
+                editor.commit();
             default: break;
         }
     }

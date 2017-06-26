@@ -135,13 +135,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
         if (tvHomeBar.getText().toString().equals(getString(R.string.btnFolder))) {
             getRelaNavTop().setVisibility(View.VISIBLE);
             getButtonBack().setVisibility(View.VISIBLE);
+            super.onBackPressed();
         } else if (tvHomeBar.getText().toString().equals(getString(R.string.btnInfo))) {
             getRelaNavTop().setVisibility(View.VISIBLE);
             getButtonBack().setVisibility(View.VISIBLE);
+            super.onBackPressed();
+        } else {
+
         }
     }
 

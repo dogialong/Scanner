@@ -169,7 +169,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
         autoScanActivity = this;
         db = new DatabaseHandler(getApplicationContext());
         arrLinkPath = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateandTime = sdf.format(new Date());
         fileOfImage = "Doc " + currentDateandTime;
 
@@ -219,6 +219,7 @@ public class AutoScanActivity extends BaseActivity implements CvCameraViewListen
                         handler.removeCallbacksAndMessages(null);
                     }
                     Singleton.getGetInstance().where = "ScanActivity";
+                    Singleton.getGetInstance().isStorage = false;
                     navToByReplace(getSupportFragmentManager(), new ActivitySlider(), "ActivitySlider", "ActivitySlider", true, R.id.rlScan);
 
                 } catch (JSONException e) {

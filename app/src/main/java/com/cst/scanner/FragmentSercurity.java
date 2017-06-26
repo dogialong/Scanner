@@ -211,6 +211,7 @@ public class FragmentSercurity extends BaseFragment implements View.OnClickListe
                                 db.updateObject(new FileObject(object.getId(),object.getPathFile(),object.getNameFile(),object.getDateFile(),"yes",object.getImage()));
                             }
                             navToByReplace(getActivity().getSupportFragmentManager(),new FStorage(),"FStorage","FStorage",true,R.id.rlKey);
+                            MainActivity.getInstance().getRelaNavTop().setVisibility(View.VISIBLE);
                         } else {
                             Toast.makeText(getContext(), "Not match", Toast.LENGTH_SHORT).show();
                         }

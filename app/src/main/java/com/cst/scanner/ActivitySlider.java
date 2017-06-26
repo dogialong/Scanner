@@ -1,9 +1,12 @@
 package com.cst.scanner;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,19 +29,20 @@ import static com.cst.scanner.R.id.position;
 
 public class ActivitySlider extends BaseFragment implements View.OnClickListener{
     private static ViewPager mPager;
-    private TextView tvName,tvPosition;
+    private TextView tvName,tvPosition,tvComment;
     private LinearLayout llBack,llDelete,llKey,llUp,llCamera;
     private  int currentPage = 1;
     private ArrayList<FileObject> arrs;
     private ArrayList<String> arrsLink;
     DatabaseHandler db;
     private int positonOfPage;
+    private SharedPreferences preferences;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_slider2,container,false);
+        View view = inflater.inflate(R.layout.activity_slider,container,false);
         init(view);
         return view;
     }
@@ -97,10 +101,14 @@ public class ActivitySlider extends BaseFragment implements View.OnClickListener
     }
 
     private void init   (View v) {
+
+        preferences = getActivity().getSharedPreferences(Singleton.getGetInstance().KEY_SHAREPREFERENCE, Context.MODE_PRIVATE);
         db =  new DatabaseHandler(getContext());
         arrs = Singleton.getGetInstance().arrayList;
         tvName = (TextView) v.findViewById(R.id.nameDoc);
         tvPosition = (TextView)v.findViewById(position);
+        tvComment = (TextView) v.findViewById(R.id.comment);
+        tvComment.setMovementMethod(new ScrollingMovementMethod());
         llBack = (LinearLayout)v.findViewById(R.id.llBack);
         llBack.setOnClickListener(this);
         llDelete = (LinearLayout)v.findViewById(R.id.llDelete);
@@ -157,6 +165,12 @@ public class ActivitySlider extends BaseFragment implements View.OnClickListener
                 } else {
                     tvPosition.setText(position+1 + "/" + arrs.size());
                 }
+                if (preferences.getString(arrsLink.get(position),"").equals("")) {
+                    tvComment.setVisibility(View.GONE);
+                } else {
+                    tvComment.setText(preferences.getString(arrsLink.get(position),""));
+                    tvComment.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -168,6 +182,14 @@ public class ActivitySlider extends BaseFragment implements View.OnClickListener
             tvPosition.setText(currentPage + "/" + arrsLink.size());
         } else {
             tvPosition.setText(currentPage + "/" + arrs.size());
+        }
+        if (arrsLink.size()> 0) {
+            if (preferences.getString(arrsLink.get(0),"").equals("")) {
+                tvComment.setVisibility(View.GONE);
+            } else {
+                tvComment.setText(preferences.getString(arrsLink.get(0),""));
+                tvComment.setVisibility(View.VISIBLE);
+            }
         }
     }
 

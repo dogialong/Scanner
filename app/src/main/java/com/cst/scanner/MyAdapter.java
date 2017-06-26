@@ -45,7 +45,7 @@ public class MyAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup view, final int position) {
-        View myImageLayout = inflater.inflate(R.layout.slide, view, false);
+        View myImageLayout = inflater.inflate(R.layout.slide2, view, false);
 
 
 

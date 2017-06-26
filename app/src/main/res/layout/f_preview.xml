@@ -8,9 +8,9 @@
 
     <RelativeLayout
         android:id="@+id/rlMain"
-        android:background="@color/black"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black">
 
         <RelativeLayout
             android:id="@+id/rlTop"
@@ -38,7 +38,7 @@
                 android:text="@string/preview"
                 android:textAlignment="center"
                 android:textColor="@color/cornflower_blue"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/llEdit"
@@ -53,28 +53,30 @@
                     android:background="@drawable/edit" />
             </LinearLayout>
         </RelativeLayout>
+
         <RelativeLayout
-            android:layout_marginBottom="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="100dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="60dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_marginTop="60dp">
+
             <EditText
-                android:background="@color/transparent"
-                android:textColor="@color/white_color"
-                android:layout_alignParentBottom="true"
                 android:id="@+id/edComment"
-                android:padding="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/transparent"
+                android:padding="5dp"
+                android:textColor="@color/white_color" />
+
             <ImageView
-                android:rotation="90"
                 android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                android:rotation="90" />
 
         </RelativeLayout>
 
@@ -122,10 +124,10 @@
 
                 <ImageView
 
-                    android:rotation="110"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:background="@drawable/turn" />
+                    android:background="@drawable/turn"
+                    android:rotation="110" />
             </LinearLayout>
 
             <LinearLayout
